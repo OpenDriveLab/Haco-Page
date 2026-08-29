@@ -1,0 +1,344 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="PACE: Physically Grounded Active Compliance for Dexterous Force Control">
+  <meta property="og:title" content="PACE">
+  <meta property="og:description" content="Closing the tactile–force loop for contact-rich dexterous manipulation.">
+  <meta property="og:image" content="http://localhost:35695/site/public/og.png">
+  <title>PACE · Physically Grounded Active Compliance</title>
+  <link rel="stylesheet" href="app/globals.css?v=20260830-9">
+</head>
+<body>
+  <main>
+    <section class="hero-cover" id="top">
+      <video autoplay muted loop playsinline controls preload="metadata" poster="public/placeholders/robot-hand.jpg" aria-label="PACE overview video placeholder">
+        <source src="public/placeholders/robot-hand-demo.mp4" type="video/mp4">
+      </video>
+      <span class="hero-placeholder-label">Hero video placeholder · final five-task montage</span>
+      <a class="scroll-cue" href="#article">Scroll to explore ↓</a>
+    </section>
+
+    <section class="article-body" id="article">
+      <span class="legacy-anchor" id="paper" aria-hidden="true"></span>
+      <div class="article-layout">
+        <aside class="article-outline" aria-label="Article outline"><nav>
+          <a href="#title">Title</a>
+          <a href="#abstract">Abstract</a>
+          <a href="#contributions">Contributions</a>
+          <a href="#method">Method</a>
+          <a data-level="2" href="#architecture">Architecture</a>
+          <a data-level="2" href="#data-flow">Data flow</a>
+          <a href="#benchmark">Benchmark</a>
+          <a href="#results">Results</a>
+          <a data-level="2" href="#main-comparison">Main comparison</a>
+          <a data-level="2" href="#perception">Perception</a>
+          <a data-level="2" href="#compliance">Active compliance</a>
+          <a data-level="2" href="#integration">Feedback integration</a>
+          <a data-level="2" href="#wrist-camera">Wrist cameras</a>
+          <a data-level="2" href="#posttraining-scaling">Post-training scaling</a>
+          <a href="#failures">Failure cases</a>
+          <a href="#citation">Citation</a>
+        </nav></aside>
+
+        <article class="article-shell">
+          <header class="title-block" id="title">
+            <div class="venue">PROJECT PAGE · ICLR 2027 WORKING DRAFT</div>
+            <h1><span>PACE:</span> Physically Grounded Active Compliance for Dexterous Force Control</h1>
+            <p class="authors">Anonymous authors</p>
+            <p class="affiliation">Under review · Internal experiment planning page</p>
+            <div class="article-links">
+              <a class="article-link disabled" href="#" aria-disabled="true" data-url-placeholder="page" onclick="return false">☁ Page</a>
+              <a class="article-link disabled" href="#" aria-disabled="true" data-url-placeholder="paper" onclick="return false">▤ Paper</a>
+              <a class="article-link disabled" href="#" aria-disabled="true" data-url-placeholder="code" onclick="return false">⌘ Code</a>
+            </div>
+          </header>
+
+          <section id="abstract">
+            <h2>Abstract</h2>
+            <div class="abstract-language" lang="en">
+              <h3>English</h3>
+              <p>Contact-rich dexterous manipulation requires robots to generate precise motions while actively regulating forces across continuously evolving multi-finger, multi-contact interactions. Recent advances in tactile sensing have substantially improved contact adaptation under occlusion, slip, and object deformation. Yet most learning-based policies employ touch as an additional observation, an auxiliary prediction target, or an action-refinement signal for kinematic trajectory generation, leaving the relationship between policy outputs and the forces realized by the low-level controller largely underexplored.</p>
+              <p>Compliance control provides a key connection between motion and force. A low-level position controller converts the discrepancy between a target reference and the contact-constrained realized configuration into joint torques, thereby generating and regulating interaction forces. Conventional approaches typically rely on contact-force estimation, robot models, and control Jacobians, which are difficult to apply to the distributed and continuously evolving contacts of high-DoF dexterous hands.</p>
+              <p>We introduce <strong>PACE: Physically Grounded Active Compliance for Dexterous Force Control</strong>, a policy that learns active force regulation from physical feedback. PACE introduces <strong>Active–Reactive Force Perception</strong> to jointly sense the two coupled sides of physical interaction: joint torques characterize how forces are generated, transmitted, and distributed through the hand, while fingertip tactile signals capture local reaction forces, shear, and deformation at the contact interface. A <strong>Compliance Grounding Module</strong> then uses <strong>Gated Compliance Cross-Attention</strong> to progressively update the action representation according to the current force interaction. PACE directly generates controller-executable <strong>active compliance actions</strong>, expressing intended motion and active force regulation within a unified compliant joint command.</p>
+              <p>We further introduce a real-world benchmark for dexterous force control spanning five interaction regimes: multi-contact friction, tangential interaction, high-curvature fragile contact, rotational torque, and deformable-object interaction. PACE outperforms motion-control and visuotactile action-prediction baselines, while ablations validate the contributions of active–reactive force perception, compliance grounding, and the active compliance action formulation.</p>
+            </div>
+            <div class="abstract-language abstract-language--zh" lang="zh-CN">
+              <h3>中文</h3>
+              <p>接触丰富的灵巧操作既要求机器人生成准确的运动，也要求其在持续变化的多指、多点接触中主动调节作用力。近年来，触觉感知显著提升了机器人在遮挡、滑动和物体形变条件下的接触适应能力。然而，现有学习型策略通常将触觉作为额外观测、辅助预测目标或动作修正信号，用于改善运动学轨迹，其动作输出与低层控制器所产生作用力之间的关系仍缺少显式建模。</p>
+              <p>柔顺控制为连接运动与力提供了关键机制。低层位置控制器能够将目标 reference 与受接触约束的真实构型之间的偏差转化为关节力矩，从而产生并调节作用力。传统方法通常依赖接触力估计、机器人模型和控制 Jacobian，难以覆盖高自由度灵巧手中分布式、持续演化的多点接触。</p>
+              <p>我们提出 <strong>PACE: Physically Grounded Active Compliance for Dexterous Force Control</strong>，一种从物理反馈中学习主动控力的策略。PACE 引入 <strong>Active–Reactive Force Perception</strong>，联合感知物理交互中的主动施力与接触反作用：关节力矩刻画作用力如何通过整只手产生、传递和分配，指尖触觉刻画接触界面的局部反作用、剪切与形变。随后，<strong>Compliance Grounding Module</strong> 通过 <strong>Gated Compliance Cross-Attention</strong>，根据当前力交互状态逐层更新动作表征。PACE 直接生成低层控制器可执行的 <strong>active compliance action</strong>，以统一的柔顺关节指令表达期望运动与主动施力。</p>
+              <p>我们进一步构建真实世界灵巧力控 benchmark，包含多接触摩擦、切向作用、高曲率脆弱接触、旋转力矩和可变形物体交互五类任务。实验结果表明，PACE 优于运动控制与视触觉动作预测方法；消融实验进一步验证了主动—反作用力感知、柔顺反馈模块和主动柔顺动作表示的有效性。</p>
+            </div>
+          </section>
+
+          <section id="contributions">
+            <h2>Contributions</h2>
+            <ul>
+              <li><strong>Whole-hand physical perception.</strong> PACE fuses precise fingertip tactile fields with distributed joint-torque histories that capture transmitted and actively generated loads.</li>
+              <li><strong>Learned active compliance.</strong> The policy uses gated physical cross-attention to directly generate a compliant joint command and jointly ground the command's force-producing component, without explicit contact-model identification or Jacobian inversion.</li>
+              <li><strong>Real-World Force Benchmark.</strong> Five tasks isolate multi-contact friction, tangential force, curved fragile contact, rotational torque, and deformable interaction.</li>
+              <li><strong>A controlled evaluation plan.</strong> Main comparisons and controlled ablations isolate whole-hand physical perception, active compliance formulation, feedback integration, observation coverage, and post-training compute/data scaling.</li>
+            </ul>
+          </section>
+
+          <section id="method">
+            <h2>Method</h2>
+            <p>PACE augments a pretrained GR00T vision–language–action policy with a physical-feedback pathway. Language, vision, and robot state establish the evolving manipulation context, while fingertip tactile and joint-torque histories form a complementary whole-hand physical memory. Gated physical cross-attention repeatedly updates a shared action latent that directly generates the compliant joint command and, as an auxiliary grounded output, the command's active-compliance component.</p>
+
+            <figure class="paper-figure" id="architecture">
+              <div class="architecture-frame">
+                <img src="public/placeholders/robot-hand.jpg" alt="Temporary image occupying the future PACE architecture figure">
+                <div class="architecture-copy"><b>PACE architecture figure</b><span>Vision + language → GR00T action latent<br>Tactile + torque → physical memory → gated cross-attention<br>Shared latent → q<sub>compliance</sub> + Δq<sub>intent</sub><br>Executed command = q<sub>compliance</sub></span></div>
+              </div>
+              <figcaption>Figure 1. Architecture placeholder. The final figure will distinguish the visuomotor and tactile–force feedback loops and show how gated physical updates ground the directly executed compliant command.</figcaption>
+            </figure>
+
+            <div class="signal-key">
+              <article><b>Fingertip tactile sensing</b><p>Local contact area, geometry, deformation, shear, and fingertip wrench.</p></article>
+              <article><b>Joint-torque sensing</b><p>Distributed actuator effort, transmitted load, and active force generation through the full hand.</p></article>
+            </div>
+
+            <figure class="paper-figure" id="data-flow">
+              <video class="teaser-video" controls muted loop preload="metadata" poster="public/placeholders/robot-hand.jpg" aria-label="PACE model data-flow placeholder">
+                <source src="public/placeholders/robot-hand-demo.mp4" type="video/mp4">
+              </video>
+              <figcaption>Video 2. Data-flow placeholder. The final animation will synchronize camera frames, tactile maps, joint-torque traces, physical tokens, predicted compliance offsets, and the resulting hand response through one closed-loop timestep.</figcaption>
+            </figure>
+          </section>
+
+          <section id="benchmark">
+            <h2>Real-World Force Benchmark</h2>
+            <p>The benchmark organizes everyday manipulation by the physical role that determines success. This section is also the primary inference-demo gallery: each task will show an autonomous rollout together with its task-specific success definition.</p>
+            <div class="benchmark-taxonomy" aria-label="Benchmark force taxonomy">
+              <div class="active" data-task="poker" aria-current="true" style="--c:var(--task-poker)">FRICTION</div><div data-task="book" style="--c:var(--task-book)">SHEAR</div><div data-task="balloon" style="--c:var(--task-balloon)">CURVATURE</div><div data-task="cap" style="--c:var(--task-cap)">TORQUE</div><div data-task="paste" style="--c:var(--task-paste)">DEFORMATION</div>
+            </div>
+            <div class="demo-gallery">
+              <div class="demo-pills" role="tablist" aria-label="Benchmark tasks">
+                <button class="demo-pill active" type="button" data-task="poker">Insert poker</button>
+                <button class="demo-pill" type="button" data-task="book">Open book</button>
+                <button class="demo-pill" type="button" data-task="balloon">Draw on balloon</button>
+                <button class="demo-pill" type="button" data-task="cap">Unscrew cap</button>
+                <button class="demo-pill" type="button" data-task="paste">Squeeze toothpaste</button>
+              </div>
+              <div class="demo-view"><video id="benchmark-video" controls muted loop preload="metadata" poster="public/placeholders/robot-hand.jpg" aria-label="Selected benchmark rollout placeholder"><source src="public/placeholders/robot-hand-demo.mp4" type="video/mp4"></video></div>
+              <div class="demo-caption"><b id="demo-title">Insert poker · multi-contact friction</b><p id="demo-description">Begin with two playing cards lying on the black platform. Use the right hand to pick up one card and transfer it to the left hand. Hold the first card upright and steady with the left hand. Then use the right hand to pick up the remaining card, align it with the card held in the left hand, and slide it into the same grip so that both cards are held together. Finish with both cards securely held in the left hand and the right hand released. Do not bend or drop either card.</p></div>
+            </div>
+          </section>
+
+          <section id="results">
+            <h2>Experiments</h2>
+            <div class="result-intro"><p>Every planned study uses the same five-task benchmark and reports a macro mean. A grouped chart summarizes the main comparison, horizontal bars summarize component ablations, and paired scaling curves separate post-training compute from demonstration count.</p></div>
+            <div class="placeholder-warning">Planning state: tables are complete, but every numerical cell is intentionally empty.</div>
+
+            <div class="experiment-group" id="main-comparison">
+              <h3>Main comparison</h3><p>Seven representative dexterous-manipulation and VLA approaches evaluated under a shared task protocol.</p>
+              <figure class="result-figure">
+                <div class="result-figure__frame">
+                  <div class="result-figure__note"><span>Task success rate by method</span><span>Repeated illustrative heights · awaiting results</span></div>
+                  <div class="grouped-legend"><span><i style="--c:var(--task-poker)"></i>Insert poker</span><span><i style="--c:var(--task-book)"></i>Open book</span><span><i style="--c:var(--task-balloon)"></i>Draw on balloon</span><span><i style="--c:var(--task-cap)"></i>Unscrew cap</span><span><i style="--c:var(--task-paste)"></i>Squeeze toothpaste</span></div>
+                  <div class="grouped-chart">
+                    <div class="model-group"><div class="model-bars"><i class="task-bar" tabindex="0" role="img" data-value="62%" aria-label="Insert poker: 62% illustrative placeholder" style="--h:62%;--c:var(--task-poker)"></i><i class="task-bar" tabindex="0" role="img" data-value="76%" aria-label="Open book: 76% illustrative placeholder" style="--h:76%;--c:var(--task-book)"></i><i class="task-bar" tabindex="0" role="img" data-value="55%" aria-label="Draw on balloon: 55% illustrative placeholder" style="--h:55%;--c:var(--task-balloon)"></i><i class="task-bar" tabindex="0" role="img" data-value="68%" aria-label="Unscrew cap: 68% illustrative placeholder" style="--h:68%;--c:var(--task-cap)"></i><i class="task-bar" tabindex="0" role="img" data-value="60%" aria-label="Squeeze toothpaste: 60% illustrative placeholder" style="--h:60%;--c:var(--task-paste)"></i></div><span class="model-label">DECO</span></div>
+                    <div class="model-group"><div class="model-bars"><i class="task-bar" tabindex="0" role="img" data-value="62%" aria-label="Insert poker: 62% illustrative placeholder" style="--h:62%;--c:var(--task-poker)"></i><i class="task-bar" tabindex="0" role="img" data-value="76%" aria-label="Open book: 76% illustrative placeholder" style="--h:76%;--c:var(--task-book)"></i><i class="task-bar" tabindex="0" role="img" data-value="55%" aria-label="Draw on balloon: 55% illustrative placeholder" style="--h:55%;--c:var(--task-balloon)"></i><i class="task-bar" tabindex="0" role="img" data-value="68%" aria-label="Unscrew cap: 68% illustrative placeholder" style="--h:68%;--c:var(--task-cap)"></i><i class="task-bar" tabindex="0" role="img" data-value="60%" aria-label="Squeeze toothpaste: 60% illustrative placeholder" style="--h:60%;--c:var(--task-paste)"></i></div><span class="model-label">ViTacFormer</span></div>
+                    <div class="model-group"><div class="model-bars"><i class="task-bar" tabindex="0" role="img" data-value="62%" aria-label="Insert poker: 62% illustrative placeholder" style="--h:62%;--c:var(--task-poker)"></i><i class="task-bar" tabindex="0" role="img" data-value="76%" aria-label="Open book: 76% illustrative placeholder" style="--h:76%;--c:var(--task-book)"></i><i class="task-bar" tabindex="0" role="img" data-value="55%" aria-label="Draw on balloon: 55% illustrative placeholder" style="--h:55%;--c:var(--task-balloon)"></i><i class="task-bar" tabindex="0" role="img" data-value="68%" aria-label="Unscrew cap: 68% illustrative placeholder" style="--h:68%;--c:var(--task-cap)"></i><i class="task-bar" tabindex="0" role="img" data-value="60%" aria-label="Squeeze toothpaste: 60% illustrative placeholder" style="--h:60%;--c:var(--task-paste)"></i></div><span class="model-label">T-Rex</span></div>
+                    <div class="model-group"><div class="model-bars"><i class="task-bar" tabindex="0" role="img" data-value="62%" aria-label="Insert poker: 62% illustrative placeholder" style="--h:62%;--c:var(--task-poker)"></i><i class="task-bar" tabindex="0" role="img" data-value="76%" aria-label="Open book: 76% illustrative placeholder" style="--h:76%;--c:var(--task-book)"></i><i class="task-bar" tabindex="0" role="img" data-value="55%" aria-label="Draw on balloon: 55% illustrative placeholder" style="--h:55%;--c:var(--task-balloon)"></i><i class="task-bar" tabindex="0" role="img" data-value="68%" aria-label="Unscrew cap: 68% illustrative placeholder" style="--h:68%;--c:var(--task-cap)"></i><i class="task-bar" tabindex="0" role="img" data-value="60%" aria-label="Squeeze toothpaste: 60% illustrative placeholder" style="--h:60%;--c:var(--task-paste)"></i></div><span class="model-label">GR00T</span></div>
+                    <div class="model-group"><div class="model-bars"><i class="task-bar" tabindex="0" role="img" data-value="62%" aria-label="Insert poker: 62% illustrative placeholder" style="--h:62%;--c:var(--task-poker)"></i><i class="task-bar" tabindex="0" role="img" data-value="76%" aria-label="Open book: 76% illustrative placeholder" style="--h:76%;--c:var(--task-book)"></i><i class="task-bar" tabindex="0" role="img" data-value="55%" aria-label="Draw on balloon: 55% illustrative placeholder" style="--h:55%;--c:var(--task-balloon)"></i><i class="task-bar" tabindex="0" role="img" data-value="68%" aria-label="Unscrew cap: 68% illustrative placeholder" style="--h:68%;--c:var(--task-cap)"></i><i class="task-bar" tabindex="0" role="img" data-value="60%" aria-label="Squeeze toothpaste: 60% illustrative placeholder" style="--h:60%;--c:var(--task-paste)"></i></div><span class="model-label">CGP</span></div>
+                    <div class="model-group"><div class="model-bars"><i class="task-bar" tabindex="0" role="img" data-value="62%" aria-label="Insert poker: 62% illustrative placeholder" style="--h:62%;--c:var(--task-poker)"></i><i class="task-bar" tabindex="0" role="img" data-value="76%" aria-label="Open book: 76% illustrative placeholder" style="--h:76%;--c:var(--task-book)"></i><i class="task-bar" tabindex="0" role="img" data-value="55%" aria-label="Draw on balloon: 55% illustrative placeholder" style="--h:55%;--c:var(--task-balloon)"></i><i class="task-bar" tabindex="0" role="img" data-value="68%" aria-label="Unscrew cap: 68% illustrative placeholder" style="--h:68%;--c:var(--task-cap)"></i><i class="task-bar" tabindex="0" role="img" data-value="60%" aria-label="Squeeze toothpaste: 60% illustrative placeholder" style="--h:60%;--c:var(--task-paste)"></i></div><span class="model-label">DexTeleop</span></div>
+                    <div class="model-group is-ours"><div class="model-bars"><i class="task-bar" tabindex="0" role="img" data-value="62%" aria-label="Insert poker: 62% illustrative placeholder" style="--h:62%;--c:var(--task-poker)"></i><i class="task-bar" tabindex="0" role="img" data-value="76%" aria-label="Open book: 76% illustrative placeholder" style="--h:76%;--c:var(--task-book)"></i><i class="task-bar" tabindex="0" role="img" data-value="55%" aria-label="Draw on balloon: 55% illustrative placeholder" style="--h:55%;--c:var(--task-balloon)"></i><i class="task-bar" tabindex="0" role="img" data-value="68%" aria-label="Unscrew cap: 68% illustrative placeholder" style="--h:68%;--c:var(--task-cap)"></i><i class="task-bar" tabindex="0" role="img" data-value="60%" aria-label="Squeeze toothpaste: 60% illustrative placeholder" style="--h:60%;--c:var(--task-paste)"></i></div><span class="model-label">PACE</span></div>
+                  </div>
+                </div>
+                <figcaption>Figure 2. Planned grouped comparison. Each method contains five task-level success bars; the repeated placeholder heights demonstrate layout only and are not experimental results.</figcaption>
+              </figure>
+              <div class="table-wrap"><table class="result-table">
+                <thead><tr><th>Method</th><th>Insert poker</th><th>Open book</th><th>Draw on balloon</th><th>Unscrew cap</th><th>Squeeze toothpaste</th><th>Mean</th></tr></thead>
+                <tbody>
+                  <tr><th>DECO</th><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+                  <tr><th>ViTacFormer</th><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+                  <tr><th>T-Rex</th><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+                  <tr><th>GR00T</th><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+                  <tr><th>CGP</th><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+                  <tr><th>DexTeleop</th><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+                  <tr class="ours"><th>PACE</th><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+                </tbody>
+              </table></div><p class="table-caption">Table 1. Main comparison across the five real-world force-sensitive tasks.</p>
+            </div>
+
+            <div class="experiment-group" id="perception">
+              <h3>Whole-hand physical perception ablation</h3><p>Test whether fingertip tactile sensing and distributed joint-torque sensing are complementary, and whether same-finger fusion is preferable to separate physical tokens.</p>
+              <figure class="result-figure">
+                <div class="result-figure__frame"><div class="result-figure__note"><span>Macro mean by perception configuration</span><span>Awaiting results</span></div><div class="horizontal-bars">
+                  <div class="horizontal-bar"><span class="horizontal-bar__label">Vision only</span><div class="horizontal-bar__track"><i class="horizontal-bar__fill"></i></div><span class="horizontal-bar__value">TBD</span></div>
+                  <div class="horizontal-bar"><span class="horizontal-bar__label">Tactile only</span><div class="horizontal-bar__track"><i class="horizontal-bar__fill"></i></div><span class="horizontal-bar__value">TBD</span></div>
+                  <div class="horizontal-bar"><span class="horizontal-bar__label">Torque only</span><div class="horizontal-bar__track"><i class="horizontal-bar__fill"></i></div><span class="horizontal-bar__value">TBD</span></div>
+                  <div class="horizontal-bar"><span class="horizontal-bar__label">Torque + tactile · separate</span><div class="horizontal-bar__track"><i class="horizontal-bar__fill"></i></div><span class="horizontal-bar__value">TBD</span></div>
+                  <div class="horizontal-bar is-ours"><span class="horizontal-bar__label">Torque + tactile · fused</span><div class="horizontal-bar__track"><i class="horizontal-bar__fill"></i></div><span class="horizontal-bar__value">TBD</span></div>
+                </div></div><figcaption>Figure 3. Planned horizontal summary of the perception ablation; the full table retains task-wise results.</figcaption>
+              </figure>
+              <div class="table-wrap"><table class="result-table">
+                <thead><tr><th>Physical perception</th><th>Insert poker</th><th>Open book</th><th>Draw on balloon</th><th>Unscrew cap</th><th>Squeeze toothpaste</th><th>Mean</th></tr></thead>
+                <tbody>
+                  <tr><th>Vision only</th><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+                  <tr><th>Tactile only</th><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+                  <tr><th>Torque only</th><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+                  <tr><th>Torque + tactile · separate</th><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+                  <tr class="ours"><th>Torque + tactile · fused</th><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+                </tbody>
+              </table></div><p class="table-caption">Table 2. Whole-hand physical perception ablation across sensing modalities and token organization.</p>
+            </div>
+
+            <div class="experiment-group" id="compliance">
+              <h3>Active compliance formulation ablation</h3><p>Hold physical perception and feedback integration fixed while changing the action semantics used to supervise and execute the policy.</p>
+              <figure class="result-figure"><div class="result-figure__frame"><div class="result-figure__note"><span>Macro mean by active compliance formulation</span><span>Awaiting results</span></div><div class="horizontal-bars">
+                <div class="horizontal-bar is-ours"><span class="horizontal-bar__label">PACE · q_compliance + delta_q</span><div class="horizontal-bar__track"><i class="horizontal-bar__fill"></i></div><span class="horizontal-bar__value">TBD</span></div>
+                <div class="horizontal-bar"><span class="horizontal-bar__label">PACE-Direct · q_compliance</span><div class="horizontal-bar__track"><i class="horizontal-bar__fill"></i></div><span class="horizontal-bar__value">TBD</span></div>
+                <div class="horizontal-bar"><span class="horizontal-bar__label">PACE-Nominal · q_nominal</span><div class="horizontal-bar__track"><i class="horizontal-bar__fill"></i></div><span class="horizontal-bar__value">TBD</span></div>
+              </div></div><figcaption>Figure 4. Planned horizontal summary of active compliance formulations.</figcaption></figure>
+              <div class="table-wrap"><table class="result-table">
+                <thead><tr><th>Action formulation</th><th>Insert poker</th><th>Open book</th><th>Draw on balloon</th><th>Unscrew cap</th><th>Squeeze toothpaste</th><th>Mean</th></tr></thead>
+                <tbody>
+                  <tr class="ours"><th>PACE · q_compliance + delta_q</th><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+                  <tr><th>PACE-Direct · q_compliance</th><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+                  <tr><th>PACE-Nominal · q_nominal</th><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+                </tbody>
+              </table></div><p class="table-caption">Table 3. Active compliance formulation ablation: nominal motion, direct compliant motion, and delta-grounded compliant motion.</p>
+            </div>
+
+            <div class="experiment-group" id="integration">
+              <h3>Physical feedback integration ablation</h3><p>Hold sensing and action formulation fixed while changing how tactile-force feedback enters and updates the shared action latent.</p>
+              <figure class="result-figure"><div class="result-figure__frame"><div class="result-figure__note"><span>Macro mean by physical feedback integration</span><span>Awaiting results</span></div><div class="horizontal-bars">
+                <div class="horizontal-bar"><span class="horizontal-bar__label">Suffix fusion</span><div class="horizontal-bar__track"><i class="horizontal-bar__fill"></i></div><span class="horizontal-bar__value">TBD</span></div>
+                <div class="horizontal-bar"><span class="horizontal-bar__label">Image-memory fusion</span><div class="horizontal-bar__track"><i class="horizontal-bar__fill"></i></div><span class="horizontal-bar__value">TBD</span></div>
+                <div class="horizontal-bar"><span class="horizontal-bar__label">Ungated physical cross-attention</span><div class="horizontal-bar__track"><i class="horizontal-bar__fill"></i></div><span class="horizontal-bar__value">TBD</span></div>
+                <div class="horizontal-bar is-ours"><span class="horizontal-bar__label">Gated physical cross-attention</span><div class="horizontal-bar__track"><i class="horizontal-bar__fill"></i></div><span class="horizontal-bar__value">TBD</span></div>
+              </div></div><figcaption>Figure 5. Planned horizontal summary of physical feedback integration mechanisms.</figcaption></figure>
+              <div class="table-wrap"><table class="result-table">
+                <thead><tr><th>Feedback integration</th><th>Insert poker</th><th>Open book</th><th>Draw on balloon</th><th>Unscrew cap</th><th>Squeeze toothpaste</th><th>Mean</th></tr></thead>
+                <tbody>
+                  <tr><th>Suffix fusion</th><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+                  <tr><th>Image-memory fusion</th><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+                  <tr><th>Ungated physical cross-attention</th><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+                  <tr class="ours"><th>Gated physical cross-attention</th><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+                </tbody>
+              </table></div><p class="table-caption">Table 4. Physical feedback integration ablation across token routing and compliance-update mechanisms.</p>
+            </div>
+
+            <div class="experiment-group" id="wrist-camera">
+              <h3>Wrist-camera observation ablation</h3><p>A compact observation study that isolates the contribution of wrist-mounted visual coverage while keeping physical sensing and the PACE policy fixed.</p>
+              <figure class="result-figure"><div class="result-figure__frame"><div class="result-figure__note"><span>Macro mean with and without wrist cameras</span><span>Awaiting results</span></div><div class="horizontal-bars">
+                <div class="horizontal-bar is-ours"><span class="horizontal-bar__label">PACE · with wrist cameras</span><div class="horizontal-bar__track"><i class="horizontal-bar__fill"></i></div><span class="horizontal-bar__value">TBD</span></div>
+                <div class="horizontal-bar"><span class="horizontal-bar__label">PACE · w/o wrist cameras</span><div class="horizontal-bar__track"><i class="horizontal-bar__fill"></i></div><span class="horizontal-bar__value">TBD</span></div>
+              </div></div><figcaption>Figure 6. Planned compact summary of the wrist-camera observation ablation.</figcaption></figure>
+              <div class="table-wrap"><table class="result-table">
+                <thead><tr><th>Camera observation</th><th>Insert poker</th><th>Open book</th><th>Draw on balloon</th><th>Unscrew cap</th><th>Squeeze toothpaste</th><th>Mean</th></tr></thead>
+                <tbody>
+                  <tr class="ours"><th>PACE · with wrist cameras</th><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+                  <tr><th>PACE · w/o wrist cameras</th><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+                </tbody>
+              </table></div><p class="table-caption">Table 5. Small ablation on wrist-camera observations.</p>
+            </div>
+
+            <div class="experiment-group" id="posttraining-scaling">
+              <h3>Post-training compute and data scaling</h3>
+              <p>Evaluate one representative task with two controlled sweeps. The left panel fixes 100 post-training demonstrations and varies optimization steps; the right fixes 50k steps and varies the number of demonstrations.</p>
+              <figure class="result-figure scaling-figure">
+                <div class="result-figure__note"><span>Single-task success rate · shared 0–100% scale</span><span>Representative task: TBD · awaiting results</span></div>
+                <div class="scaling-panels">
+                  <section class="scaling-panel" aria-label="Optimization scaling: 100 demonstrations fixed">
+                    <div class="scaling-panel__header"><b>Optimization scaling</b><span>100 demonstrations fixed</span></div>
+                    <div class="scaling-plot"><div class="scaling-y-axis"><span>100</span><span>50</span><span>0</span></div><div class="scaling-canvas">
+                      <div class="scaling-area" style="--shape:polygon(0 66%, 25% 52%, 50% 39%, 75% 29%, 100% 23%, 100% 100%, 0 100%)"></div>
+                      <i class="scaling-dot" style="--x:0%;--y:34%"></i><i class="scaling-dot" style="--x:25%;--y:48%"></i><i class="scaling-dot" style="--x:50%;--y:61%"></i><i class="scaling-dot" style="--x:75%;--y:71%"></i><i class="scaling-dot" style="--x:100%;--y:77%"></i>
+                    </div></div>
+                    <div class="scaling-x-labels"><span>10k</span><span>20k</span><span>30k</span><span>40k</span><span>50k</span></div>
+                    <div class="scaling-axis-title">Post-training steps</div>
+                  </section>
+                  <section class="scaling-panel" aria-label="Data scaling: 50k steps fixed">
+                    <div class="scaling-panel__header"><b>Data scaling</b><span>50k steps fixed</span></div>
+                    <div class="scaling-plot"><div class="scaling-y-axis"><span>100</span><span>50</span><span>0</span></div><div class="scaling-canvas">
+                      <div class="scaling-area" style="--shape:polygon(0 73%, 25% 57%, 50% 43%, 75% 31%, 100% 23%, 100% 100%, 0 100%)"></div>
+                      <i class="scaling-dot" style="--x:0%;--y:27%"></i><i class="scaling-dot" style="--x:25%;--y:43%"></i><i class="scaling-dot" style="--x:50%;--y:57%"></i><i class="scaling-dot" style="--x:75%;--y:69%"></i><i class="scaling-dot" style="--x:100%;--y:77%"></i>
+                    </div></div>
+                    <div class="scaling-x-labels"><span>10</span><span>30</span><span>50</span><span>70</span><span>100</span></div>
+                    <div class="scaling-axis-title">Post-training demonstrations</div>
+                  </section>
+                </div>
+                <figcaption>Figure 7. Paired post-training scaling study on one representative task. Add uncertainty intervals once repeated evaluations are available; the trajectories shown here are layout placeholders only.</figcaption>
+              </figure>
+            </div>
+          </section>
+
+          <section id="failures">
+            <h2>Failure Cases &amp; Limitations</h2>
+            <p>Failure cases will be grouped by the part of the closed loop that breaks. Each final example should pair the failed rollout with synchronized tactile, torque, and compliance-offset traces so the diagnosis is supported by evidence.</p>
+            <div class="failure-grid">
+              <article class="failure-card"><video controls muted loop preload="metadata" poster="public/placeholders/robot-hand.jpg" aria-label="Perception ambiguity failure placeholder"><source src="public/placeholders/robot-hand-demo.mp4" type="video/mp4"></video><div class="failure-card__copy"><span class="failure-card__type">Failure F1 · Perception ambiguity</span><h3>Aliased multi-contact load</h3><p>Different contact configurations can produce similar joint-torque patterns, leading to an incorrect physical-state estimate.</p></div></article>
+              <article class="failure-card"><video controls muted loop preload="metadata" poster="public/placeholders/robot-hand.jpg" aria-label="Tactile blind spot failure placeholder"><source src="public/placeholders/robot-hand-demo.mp4" type="video/mp4"></video><div class="failure-card__copy"><span class="failure-card__type">Failure F2 · Sensing coverage</span><h3>Contact outside tactile regions</h3><p>Side or palm contacts may be visible only indirectly through torque and can remain poorly localized.</p></div></article>
+              <article class="failure-card"><video controls muted loop preload="metadata" poster="public/placeholders/robot-hand.jpg" aria-label="Response bandwidth failure placeholder"><source src="public/placeholders/robot-hand-demo.mp4" type="video/mp4"></video><div class="failure-card__copy"><span class="failure-card__type">Failure F3 · Control bandwidth</span><h3>Late or saturated correction</h3><p>Fast impacts or large disturbances can exceed policy update bandwidth or available joint actuation.</p></div></article>
+              <article class="failure-card"><video controls muted loop preload="metadata" poster="public/placeholders/robot-hand.jpg" aria-label="Out-of-distribution physics failure placeholder"><source src="public/placeholders/robot-hand-demo.mp4" type="video/mp4"></video><div class="failure-card__copy"><span class="failure-card__type">Failure F4 · Distribution shift</span><h3>Unseen physical regime</h3><p>Extreme friction, stiffness, deformation, or visually ambiguous task progress can fall outside the learned interaction distribution.</p></div></article>
+            </div>
+            <div class="failure-note"><p><strong>Planned reporting rule.</strong> Categories are provisional until evaluation. Public failure demos should be consecutive, unedited trials rather than hand-selected isolated frames.</p></div>
+          </section>
+
+          <section id="citation">
+            <h2>Citation</h2>
+            <p>PACE is currently an anonymous working draft. Public citation information will be updated with the preprint.</p>
+            <pre class="bibtex">@misc{pace2027,
+  title  = {PACE: Physically Grounded Active Compliance for
+            Dexterous Force Control},
+  author = {Anonymous Authors},
+  year   = {2027}
+}</pre>
+            <p class="asset-credit">Temporary image: Oak Ridge National Laboratory, “Robotic hand,” CC BY 2.0. Temporary video: Giacomo Alessandroni, “Hand-made robotic arm with Arduino,” CC BY-SA 4.0; clipped and transcoded locally. Both will be replaced by project-owned media.</p>
+          </section>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer"><span>PACE · INTERNAL WORKING PAGE</span><span>All experiment cells intentionally blank until verified.</span><a href="#top">Back to top ↑</a></footer>
+
+  <script>
+    const demos = {
+      poker: ['Insert poker · multi-contact friction', 'Begin with two playing cards lying on the black platform. Use the right hand to pick up one card and transfer it to the left hand. Hold the first card upright and steady with the left hand. Then use the right hand to pick up the remaining card, align it with the card held in the left hand, and slide it into the same grip so that both cards are held together. Finish with both cards securely held in the left hand and the right hand released. Do not bend or drop either card.'],
+      book: ['Open book · tangential force', 'Begin with the closed book lying flat on the black platform. Use the left hand to separate and lift a thick section of pages near the middle of the book, then turn the section across the spine to open the book to an interior spread. Bring in the right hand to help guide the pages and press the book open and flat. Finish with both hands holding the selected pages flat for at least five seconds. Do not open only the front or back cover, move the book off the platform, or crease or tear any page.'],
+      balloon: ['Draw on balloon · curved fragile contact', 'Begin with the inflated yellow balloon and the black marker on the table. Gently pick up and steady the balloon with the left hand. Use the right hand to pick up the marker and draw a smiley face with two eyes and a curved smile, maintaining light and continuous contact with the balloon. After completing the drawing, set the marker down, lift and orient the balloon so that the finished face is clearly visible to the audience, and present it with the left hand while giving a thumbs-up beside it with the right hand. Do not let the balloon slip, deform excessively, or pop.'],
+      cap: ['Unscrew cap · rotational torque', 'Begin with the bottle standing upright on the white tray. Stabilize the bottle with the left hand while using the right hand to grasp the blue cap and turn it counterclockwise until it is completely detached. At the end, place the bottle upright on the white tray and set the cap down on the table beside the tray, then release both objects and move both hands away. Keep the bottle stable throughout, and do not crush, drop, or spill it.'],
+      paste: ['Squeeze toothpaste · deformable interaction', 'Regulate squeeze force and reason about material deformation to produce a controlled continuous output.']
+    };
+    document.querySelectorAll('.demo-pill').forEach((button) => {
+      button.addEventListener('click', () => {
+        document.querySelectorAll('.demo-pill').forEach((item) => item.classList.remove('active'));
+        button.classList.add('active');
+        document.querySelectorAll('.benchmark-taxonomy [data-task]').forEach((item) => {
+          const isActive = item.dataset.task === button.dataset.task;
+          item.classList.toggle('active', isActive);
+          if (isActive) item.setAttribute('aria-current', 'true');
+          else item.removeAttribute('aria-current');
+        });
+        const [title, description] = demos[button.dataset.task];
+        document.getElementById('demo-title').textContent = title;
+        document.getElementById('demo-description').textContent = description;
+        const video = document.getElementById('benchmark-video');
+        video.currentTime = 0;
+        video.play().catch(() => {});
+      });
+    });
+
+    const resultFigures = document.querySelectorAll('.result-figure');
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) {
+      resultFigures.forEach((figure) => figure.classList.add('is-visible'));
+    } else {
+      const figureObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            figureObserver.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.16, rootMargin: '0px 0px -7% 0px' });
+      resultFigures.forEach((figure) => figureObserver.observe(figure));
+    }
+  </script>
+</body>
+</html>
