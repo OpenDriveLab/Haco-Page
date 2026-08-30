@@ -22,12 +22,53 @@ const demos = [
 ];
 
 const experiments = [
-  { id: 'main-comparison', title: 'Main comparison', description: 'Seven representative dexterous-manipulation and VLA approaches evaluated under a shared task protocol.', head: 'Method', rows: ['DECO','ViTacFormer','T-Rex','GR00T','CGP','DexTeleop','PACE'], ours: 'PACE', caption: 'Table 1. Main comparison across the five real-world force-sensitive tasks.' },
-  { id: 'perception', title: 'Whole-hand physical perception ablation', description: 'Test whether fingertip tactile sensing and distributed joint-torque sensing are complementary, and whether same-finger fusion is preferable to separate physical tokens.', head: 'Physical perception', rows: ['Vision only','Tactile only','Torque only','Torque + tactile · separate','Torque + tactile · fused'], ours: 'Torque + tactile · fused', caption: 'Table 2. Whole-hand physical perception ablation across sensing modalities and token organization.' },
-  { id: 'compliance', title: 'Active compliance formulation ablation', description: 'Hold physical perception and feedback integration fixed while changing the action semantics used to supervise and execute the policy.', head: 'Action formulation', rows: ['PACE · q_compliance + delta_q','PACE-Direct · q_compliance','PACE-Nominal · q_nominal'], ours: 'PACE · q_compliance + delta_q', caption: 'Table 3. Active compliance formulation ablation: nominal motion, direct compliant motion, and delta-grounded compliant motion.' },
-  { id: 'integration', title: 'Physical feedback integration ablation', description: 'Hold sensing and action formulation fixed while changing how tactile-force feedback enters and updates the shared action latent.', head: 'Feedback integration', rows: ['Suffix fusion','Image-memory fusion','Ungated physical cross-attention','Gated physical cross-attention'], ours: 'Gated physical cross-attention', caption: 'Table 4. Physical feedback integration ablation across token routing and compliance-update mechanisms.' },
-  { id: 'wrist-camera', title: 'Wrist-camera observation ablation', description: 'A compact observation study that isolates the contribution of wrist-mounted visual coverage while keeping physical sensing and the PACE policy fixed.', head: 'Camera observation', rows: ['PACE · with wrist cameras','PACE · w/o wrist cameras'], ours: 'PACE · with wrist cameras', caption: 'Table 5. Small ablation on wrist-camera observations.' },
+  { id: 'main-comparison', title: 'Main comparison', description: 'Seven representative dexterous-manipulation and VLA approaches evaluated under a shared task protocol.', head: 'Method', rows: ['DECO','ViTacFormer','T-Rex','GR00T','CGP','DexTeleop','HACo'], ours: 'HACo', caption: 'Table 1. Main comparison across the five real-world force-sensitive tasks.' },
+  { id: 'perception', title: 'Haptic Perception Ablation', description: 'Isolate the contributions of fingertip tactile and joint-torque feedback and compare factorized and coupled haptic representations.', head: 'Haptic perception', rows: ['w/o Haptic Feedback','w/o Torque Feedback','w/o Tactile Feedback','w/o Coupled Encoding','HACo'], ours: 'HACo', caption: 'Table 2. Haptic perception ablation across sensing modalities and representation strategies.' },
+  { id: 'compliance', title: 'Active Compliance Ablation', description: 'Hold haptic perception and compliance grounding fixed while varying compliance-intent supervision and the executed action formulation.', head: 'Active compliance', rows: ['w/o Active Compliance','w/o Compliance-Intent Supervision','HACo'], ours: 'HACo', caption: 'Table 3. Active compliance ablation across nominal, direct compliant, and complete action formulations.' },
+  { id: 'integration', title: 'Compliance Grounding Ablation', description: 'Hold haptic observations and active compliance actions fixed while varying how the haptic state conditions action generation.', head: 'Compliance grounding', rows: ['Action-Suffix Fusion','Visuo–Haptic Fusion','Compliance Attention','Gated Compliance Attention'], ours: 'Gated Compliance Attention', caption: 'Table 4. Compliance grounding ablation across haptic-state conditioning mechanisms.' },
+  { id: 'wrist-camera', title: 'Wrist-Camera Ablation', description: 'A compact observation study that isolates the contribution of wrist-mounted visual coverage while keeping haptic sensing and the HACo policy fixed.', head: 'Camera observation', rows: ['w/o Wrist Cameras','HACo'], ours: 'HACo', caption: 'Table 5. Wrist-camera observation ablation.' },
 ];
+
+type TaskResult = { rate: string; count: string };
+
+const taskResults: Record<string, Record<string, Record<string, TaskResult>>> = {
+  'main-comparison': {
+    GR00T: {
+      'Insert poker': { rate: '15%', count: '3/20' },
+      'Open book': { rate: '20%', count: '4/20' },
+      'Draw on balloon': { rate: '5%', count: '1/20' },
+      'Unscrew cap': { rate: '60%', count: '12/20' },
+    },
+    HACo: {
+      'Insert poker': { rate: '90%', count: '18/20' },
+      'Open book': { rate: '85%', count: '17/20' },
+      'Draw on balloon': { rate: '60%', count: '12/20' },
+      'Unscrew cap': { rate: '95%', count: '19/20' },
+    },
+  },
+  perception: {
+    'w/o Haptic Feedback': { 'Unscrew cap': { rate: '65%', count: '13/20' } },
+    'w/o Torque Feedback': { 'Unscrew cap': { rate: '80%', count: '16/20' } },
+    'w/o Tactile Feedback': { 'Unscrew cap': { rate: '75%', count: '15/20' } },
+    'w/o Coupled Encoding': { 'Unscrew cap': { rate: '90%', count: '18/20' } },
+    HACo: { 'Unscrew cap': { rate: '95%', count: '19/20' } },
+  },
+  compliance: {
+    HACo: { 'Unscrew cap': { rate: '95%', count: '19/20' } },
+    'w/o Active Compliance': { 'Unscrew cap': { rate: '80%', count: '16/20' } },
+    'w/o Compliance-Intent Supervision': { 'Unscrew cap': { rate: '85%', count: '17/20' } },
+  },
+  integration: {
+    'Action-Suffix Fusion': { 'Unscrew cap': { rate: '60%', count: '12/20' } },
+    'Visuo–Haptic Fusion': { 'Unscrew cap': { rate: '65%', count: '13/20' } },
+    'Compliance Attention': { 'Unscrew cap': { rate: '90%', count: '18/20' } },
+    'Gated Compliance Attention': { 'Unscrew cap': { rate: '95%', count: '19/20' } },
+  },
+  'wrist-camera': {
+    'w/o Wrist Cameras': { 'Unscrew cap': { rate: '90%', count: '18/20' } },
+    HACo: { 'Unscrew cap': { rate: '95%', count: '19/20' } },
+  },
+};
 
 const scalingSweeps = [
   {
@@ -59,7 +100,11 @@ const failures = [
 
 function ResultChart({ experiment }: { experiment: typeof experiments[number] }) {
   if (experiment.id === 'main-comparison') {
-    return <figure className="result-figure"><div className="result-figure__frame"><div className="result-figure__note"><span>Task success rate by method</span><span>Repeated illustrative heights · awaiting results</span></div><div className="grouped-legend">{groupedTasks.map(task => <span key={task.label}><i style={{ '--c': task.color } as CSSProperties}/>{task.label}</span>)}</div><div className="grouped-chart">{experiment.rows.map(row => <div className={`model-group${row === experiment.ours ? ' is-ours' : ''}`} key={row}><div className="model-bars">{groupedTasks.map(task => <i className="task-bar" key={task.label} tabIndex={0} role="img" data-value={task.height} aria-label={`${task.label}: ${task.height} illustrative placeholder`} style={{ '--h': task.height, '--c': task.color } as CSSProperties}/>)}</div><span className="model-label">{row}</span></div>)}</div></div><figcaption>Figure 2. Planned grouped comparison. Each method contains five task-level success bars; the repeated placeholder heights demonstrate layout only and are not experimental results.</figcaption></figure>;
+    return <figure className="result-figure"><div className="result-figure__frame"><div className="result-figure__note"><span>Task success rate by method</span><span>Reported task results shown; remaining bars are placeholders</span></div><div className="grouped-legend">{groupedTasks.map(task => <span key={task.label}><i style={{ '--c': task.color } as CSSProperties}/>{task.label}</span>)}</div><div className="grouped-chart">{experiment.rows.map(row => <div className={`model-group${row === experiment.ours ? ' is-ours' : ''}`} key={row}><div className="model-bars">{groupedTasks.map(task => {
+      const taskResult = taskResults[experiment.id]?.[row]?.[task.label];
+      const height = taskResult?.rate ?? task.height;
+      return <i className="task-bar" key={task.label} tabIndex={0} role="img" data-value={height} data-tooltip={`${task.label} · ${height}`} aria-label={taskResult ? `${task.label}: ${taskResult.count}, ${taskResult.rate}` : `${task.label}: ${height} illustrative placeholder`} style={{ '--h': height, '--c': task.color } as CSSProperties}/>;
+    })}</div><span className="model-label">{row}</span></div>)}</div></div><figcaption>Figure 2. Planned grouped comparison. Each method contains five task-level success bars; unreported task heights remain layout placeholders and are not experimental results.</figcaption></figure>;
   }
   const captions: Record<string, string> = {
     perception: 'Figure 3. Planned horizontal summary of the perception ablation; the full table retains task-wise results.',
@@ -73,7 +118,7 @@ function ResultChart({ experiment }: { experiment: typeof experiments[number] })
     integration: 'Macro mean by physical feedback integration',
     'wrist-camera': 'Macro mean with and without wrist cameras',
   };
-  return <figure className="result-figure"><div className="result-figure__frame"><div className="result-figure__note"><span>{labels[experiment.id]}</span><span>Awaiting results</span></div><div className="horizontal-bars">{experiment.rows.map(row => <div className={`horizontal-bar${row === experiment.ours ? ' is-ours' : ''}`} key={row}><span className="horizontal-bar__label">{row}</span><div className="horizontal-bar__track"><i className="horizontal-bar__fill"/></div><span className="horizontal-bar__value">TBD</span></div>)}</div></div><figcaption>{captions[experiment.id]}</figcaption></figure>;
+  return <figure className="result-figure"><div className="result-figure__frame"><div className="result-figure__note"><span>{labels[experiment.id]}</span><span>Awaiting complete five-task means</span></div><div className="horizontal-bars">{experiment.rows.map(row => <div className={`horizontal-bar${row === experiment.ours ? ' is-ours' : ''}`} key={row}><span className="horizontal-bar__label">{row}</span><div className="horizontal-bar__track"><i className="horizontal-bar__fill"/></div><span className="horizontal-bar__value">TBD</span></div>)}</div></div><figcaption>{captions[experiment.id]}</figcaption></figure>;
 }
 
 function ResultsTable({ experiment }: { experiment: typeof experiments[number] }) {
@@ -83,7 +128,10 @@ function ResultsTable({ experiment }: { experiment: typeof experiments[number] }
     <ResultChart experiment={experiment}/>
     <div className="table-wrap"><table className="result-table">
       <thead><tr><th>{experiment.head}</th>{tasks.map(task => <th key={task}>{task}</th>)}<th>Mean</th></tr></thead>
-      <tbody>{experiment.rows.map(row => <tr className={row === experiment.ours ? 'ours' : ''} key={row}><th>{row}</th>{tasks.map(task => <td key={task}>—</td>)}<td>—</td></tr>)}</tbody>
+      <tbody>{experiment.rows.map(row => {
+        const rowResults = taskResults[experiment.id]?.[row];
+        return <tr className={row === experiment.ours ? 'ours' : ''} key={row}><th>{row}</th>{tasks.map(task => <td key={task}>{rowResults?.[task]?.count ?? '—'}</td>)}<td>—</td></tr>;
+      })}</tbody>
     </table></div>
     <p className="table-caption">{experiment.caption}</p>
   </div>;
@@ -97,7 +145,7 @@ function ScalingPanel({ sweep }: { sweep: typeof scalingSweeps[number] }) {
       <div className="scaling-y-axis"><span>100</span><span>50</span><span>0</span></div>
       <div className="scaling-canvas">
         <div className="scaling-area" style={{ '--shape': sweep.shape } as CSSProperties}/>
-        {sweep.points.map((point, index) => <i className="scaling-dot" key={sweep.labels[index]} style={{ '--x': positions[index], '--y': point } as CSSProperties}/>) }
+        {sweep.points.map((point, index) => <i className="scaling-dot" key={sweep.labels[index]} tabIndex={0} role="img" data-value={point} aria-label={`${sweep.labels[index]}: ${point} illustrative placeholder`} style={{ '--x': positions[index], '--y': point } as CSSProperties}/>) }
       </div>
     </div>
     <div className="scaling-x-labels">{sweep.labels.map(label => <span key={label}>{label}</span>)}</div>
@@ -142,42 +190,55 @@ export default function Home() {
   return <>
     <main>
       <section className="hero-cover" id="top">
-        <video autoPlay muted loop playsInline controls preload="metadata" poster="/placeholders/robot-hand.jpg" aria-label="PACE overview video placeholder"><source src="/placeholders/robot-hand-demo.mp4" type="video/mp4"/></video>
+        <video autoPlay muted loop playsInline controls preload="metadata" poster="/placeholders/robot-hand.jpg" aria-label="HACo overview video placeholder"><source src="/placeholders/robot-hand-demo.mp4" type="video/mp4"/></video>
         <span className="hero-placeholder-label">Hero video placeholder · final five-task montage</span>
         <a className="scroll-cue" href="#article">Scroll to explore ↓</a>
       </section>
 
       <section className="article-body" id="article"><span className="legacy-anchor" id="paper" aria-hidden="true"/><div className="article-layout">
         <aside className="article-outline" aria-label="Article outline"><nav>
-          <a href="#title">Title</a><a href="#abstract">Abstract</a><a href="#contributions">Contributions</a><a href="#method">Method</a><a data-level="2" href="#architecture">Architecture</a><a data-level="2" href="#data-flow">Data flow</a><a href="#benchmark">Benchmark</a><a href="#results">Results</a><a data-level="2" href="#main-comparison">Main comparison</a><a data-level="2" href="#perception">Perception</a><a data-level="2" href="#compliance">Active compliance</a><a data-level="2" href="#integration">Feedback integration</a><a data-level="2" href="#wrist-camera">Wrist cameras</a><a data-level="2" href="#posttraining-scaling">Post-training scaling</a><a href="#failures">Failure cases</a><a href="#citation">Citation</a>
+          <a href="#title">Title</a><a href="#abstract">Abstract</a><a href="#contributions">Contributions</a><a href="#method">Method</a><a data-level="2" href="#architecture">Architecture</a><a data-level="2" href="#data-flow">Data flow</a><a href="#benchmark">Benchmark</a><a href="#results">Results</a><a data-level="2" href="#main-comparison">Main comparison</a><a data-level="2" href="#perception">Haptic perception</a><a data-level="2" href="#compliance">Active compliance</a><a data-level="2" href="#integration">Compliance grounding</a><a data-level="2" href="#wrist-camera">Wrist cameras</a><a data-level="2" href="#posttraining-scaling">Post-training scaling</a><a href="#failures">Failure cases</a><a href="#citation">Citation</a>
         </nav></aside>
 
         <article className="article-shell">
-          <header className="title-block" id="title"><div className="venue">PROJECT PAGE · ICLR 2027 WORKING DRAFT</div><h1><span>PACE:</span> Physically Grounded Active Compliance for Dexterous Force Control</h1><p className="authors">Anonymous authors</p><p className="affiliation">Under review · Internal experiment planning page</p><div className="article-links"><a className="article-link disabled" href="#" aria-disabled="true" data-url-placeholder="page" onClick={(event) => event.preventDefault()}>☁ Page</a><a className="article-link disabled" href="#" aria-disabled="true" data-url-placeholder="paper" onClick={(event) => event.preventDefault()}>▤ Paper</a><a className="article-link disabled" href="#" aria-disabled="true" data-url-placeholder="code" onClick={(event) => event.preventDefault()}>⌘ Code</a></div></header>
+          <header className="title-block" id="title"><div className="venue">PROJECT PAGE · ICLR 2027 WORKING DRAFT</div><h1><span className="title-acronym"><span className="title-h">H</span><span className="title-a">A</span><span className="title-c">C</span><span className="title-o">o</span>:</span> <span className="title-h">H</span>aptic <span className="title-a">A</span>ctive <span className="title-c">C</span><span className="title-o">o</span>mpliance for Dexterous Force Control</h1><p className="authors">Anonymous authors</p><p className="affiliation">Under review · Internal experiment planning page</p><div className="article-links"><a className="article-link disabled" href="#" aria-disabled="true" data-url-placeholder="page" onClick={(event) => event.preventDefault()}>☁ Page</a><a className="article-link disabled" href="#" aria-disabled="true" data-url-placeholder="paper" onClick={(event) => event.preventDefault()}>▤ Paper</a><a className="article-link disabled" href="#" aria-disabled="true" data-url-placeholder="code" onClick={(event) => event.preventDefault()}>⌘ Code</a></div></header>
 
           <section id="abstract"><h2>Abstract</h2>
             <div className="abstract-language" lang="en">
               <h3>English</h3>
-              <p>Contact-rich dexterous manipulation requires robots to generate precise motions while actively regulating forces across continuously evolving multi-finger, multi-contact interactions. Recent advances in tactile sensing have substantially improved contact adaptation under occlusion, slip, and object deformation. Yet most learning-based policies employ touch as an additional observation, an auxiliary prediction target, or an action-refinement signal for kinematic trajectory generation, leaving the relationship between policy outputs and the forces realized by the low-level controller largely underexplored.</p>
-              <p>Compliance control provides a key connection between motion and force. A low-level position controller converts the discrepancy between a target reference and the contact-constrained realized configuration into joint torques, thereby generating and regulating interaction forces. Conventional approaches typically rely on contact-force estimation, robot models, and control Jacobians, which are difficult to apply to the distributed and continuously evolving contacts of high-DoF dexterous hands.</p>
-              <p>We introduce <strong>PACE: Physically Grounded Active Compliance for Dexterous Force Control</strong>, a policy that learns active force regulation from physical feedback. PACE introduces <strong>Active–Reactive Force Perception</strong> to jointly sense the two coupled sides of physical interaction: joint torques characterize how forces are generated, transmitted, and distributed through the hand, while fingertip tactile signals capture local reaction forces, shear, and deformation at the contact interface. A <strong>Compliance Grounding Module</strong> then uses <strong>Gated Compliance Cross-Attention</strong> to progressively update the action representation according to the current force interaction. PACE directly generates controller-executable <strong>active compliance actions</strong>, expressing intended motion and active force regulation within a unified compliant joint command.</p>
-              <p>We further introduce a real-world benchmark for dexterous force control spanning five interaction regimes: multi-contact friction, tangential interaction, high-curvature fragile contact, rotational torque, and deformable-object interaction. PACE outperforms motion-control and visuotactile action-prediction baselines, while ablations validate the contributions of active–reactive force perception, compliance grounding, and the active compliance action formulation.</p>
+              <p>Contact-rich dexterous manipulation requires robots to generate precise motions while actively regulating forces across evolving multi-finger, multi-contact interactions. Yet existing tactile-augmented manipulation policies use tactile as an additional observation or action-refinement signal for kinematic control, leaving the loop from haptic perception to active force control incomplete. Compliance control enables interaction forces to be regulated through motion references, but conventional model-based formulations scale poorly to dexterous hands.</p>
+              <p>We introduce <strong>HACo</strong>, a <strong>Haptic Active Compliance</strong> policy for dexterous force control. HACo integrates fingertip tactile and joint-torque feedback as complementary haptic observations of contact and load states. A <strong>Compliance Grounding Module</strong> conditions action generation on the evolving haptic state through gated compliance attention, while <strong>compliance-intent supervision</strong> teaches the policy to represent the force-producing component within each unified joint command. HACo directly generates active compliance actions that jointly encode desired motion and force regulation, enabling closed-loop force control without explicit contact modeling.</p>
+              <p>We further introduce a real-world benchmark spanning multi-contact friction, tangential interaction, fragile curved-surface contact, rotational torque, and deformable-object manipulation. Experiments demonstrate that HACo consistently outperforms visuomotor and visuotactile action policies, while ablations validate the contributions of haptic perception, compliance grounding, and active compliance action formulation.</p>
             </div>
             <div className="abstract-language abstract-language--zh" lang="zh-CN">
               <h3>中文</h3>
-              <p>接触丰富的灵巧操作既要求机器人生成准确的运动，也要求其在持续变化的多指、多点接触中主动调节作用力。近年来，触觉感知显著提升了机器人在遮挡、滑动和物体形变条件下的接触适应能力。然而，现有学习型策略通常将触觉作为额外观测、辅助预测目标或动作修正信号，用于改善运动学轨迹，其动作输出与低层控制器所产生作用力之间的关系仍缺少显式建模。</p>
-              <p>柔顺控制为连接运动与力提供了关键机制。低层位置控制器能够将目标 reference 与受接触约束的真实构型之间的偏差转化为关节力矩，从而产生并调节作用力。传统方法通常依赖接触力估计、机器人模型和控制 Jacobian，难以覆盖高自由度灵巧手中分布式、持续演化的多点接触。</p>
-              <p>我们提出 <strong>PACE: Physically Grounded Active Compliance for Dexterous Force Control</strong>，一种从物理反馈中学习主动控力的策略。PACE 引入 <strong>Active–Reactive Force Perception</strong>，联合感知物理交互中的主动施力与接触反作用：关节力矩刻画作用力如何通过整只手产生、传递和分配，指尖触觉刻画接触界面的局部反作用、剪切与形变。随后，<strong>Compliance Grounding Module</strong> 通过 <strong>Gated Compliance Cross-Attention</strong>，根据当前力交互状态逐层更新动作表征。PACE 直接生成低层控制器可执行的 <strong>active compliance action</strong>，以统一的柔顺关节指令表达期望运动与主动施力。</p>
-              <p>我们进一步构建真实世界灵巧力控 benchmark，包含多接触摩擦、切向作用、高曲率脆弱接触、旋转力矩和可变形物体交互五类任务。实验结果表明，PACE 优于运动控制与视触觉动作预测方法；消融实验进一步验证了主动—反作用力感知、柔顺反馈模块和主动柔顺动作表示的有效性。</p>
+              <p>接触丰富的灵巧操作要求机器人在不断变化的多指、多点接触中生成准确运动，并主动调节作用力。然而，现有触觉增强操作策略通常将触觉作为运动学控制的额外观测或动作修正信号，使从触觉感知到主动力控制的闭环仍不完整。柔顺控制使机器人能够通过运动参考调节交互作用力，但传统的模型化方法难以扩展到灵巧手。</p>
+              <p>我们提出 <strong>HACo</strong>，一种面向灵巧力控制的 <strong>Haptic Active Compliance</strong> 策略。HACo 将指尖触觉与关节力矩反馈整合为接触状态和载荷状态的互补触觉观测。<strong>Compliance Grounding Module</strong> 通过 gated compliance attention，使动作生成持续受当前触觉状态调节；同时，<strong>compliance-intent supervision</strong> 引导策略表征统一关节指令中用于产生作用力的分量。HACo 直接生成统一表达期望运动与力调节的主动柔顺动作，从而实现无需显式接触建模的闭环力控制。</p>
+              <p>我们进一步构建了一个真实世界 benchmark，覆盖多接触摩擦、切向作用、高曲率脆弱接触、旋转力矩和可变形物体交互。实验表明，HACo 持续优于视觉运动和视触觉动作策略；消融实验进一步验证了触觉感知、柔顺状态注入和主动柔顺动作设计的作用。</p>
             </div>
           </section>
 
-          <section id="contributions"><h2>Contributions</h2><ul><li><strong>Whole-hand physical perception.</strong> PACE fuses precise fingertip tactile fields with distributed joint-torque histories that capture transmitted and actively generated loads.</li><li><strong>Learned active compliance.</strong> The policy uses gated physical cross-attention to directly generate a compliant joint command and jointly ground the command&apos;s force-producing component, without explicit contact-model identification or Jacobian inversion.</li><li><strong>Real-World Force Benchmark.</strong> Five tasks isolate multi-contact friction, tangential force, curved fragile contact, rotational torque, and deformable interaction.</li><li><strong>A controlled evaluation plan.</strong> Main comparisons and controlled ablations isolate whole-hand physical perception, active compliance formulation, feedback integration, observation coverage, and post-training compute/data scaling.</li></ul></section>
+          <section id="contributions"><h2>Contributions</h2><ul><li><strong>Haptic perception.</strong> HACo integrates fingertip tactile and joint-torque feedback as complementary haptic observations of contact and load states, providing a unified representation of dexterous interaction.</li><li><strong>Active compliance.</strong> HACo combines gated compliance grounding with compliance-intent supervision to condition action generation on evolving haptic feedback and explicitly learn the force-producing component within unified joint commands.</li><li><strong>Real-World Dexterous Force Benchmark.</strong> We introduce five real-world tasks spanning multi-contact friction, tangential interaction, fragile curved-surface contact, rotational torque, and deformable-object manipulation.</li></ul></section>
 
-          <section id="method"><h2>Method</h2><p>PACE augments a pretrained GR00T vision–language–action policy with a physical-feedback pathway. Language, vision, and robot state establish the evolving manipulation context, while fingertip tactile and joint-torque histories form a complementary whole-hand physical memory. Gated physical cross-attention repeatedly updates a shared action latent that directly generates the compliant joint command and, as an auxiliary grounded output, the command&apos;s active-compliance component.</p>
-            <figure className="paper-figure" id="architecture"><div className="architecture-frame"><Image src="/placeholders/robot-hand.jpg" alt="Temporary image occupying the future PACE architecture figure" width={1280} height={1600}/><div className="architecture-copy"><b>PACE architecture figure</b><span>Vision + language → GR00T action latent<br/>Tactile + torque → physical memory → gated cross-attention<br/>Shared latent → q<sub>compliance</sub> + Δq<sub>intent</sub><br/>Executed command = q<sub>compliance</sub></span></div></div><figcaption>Figure 1. Architecture placeholder. The final figure will distinguish the visuomotor and tactile–force feedback loops and show how gated physical updates ground the directly executed compliant command.</figcaption></figure>
-            <div className="signal-key"><article><b>Fingertip tactile sensing</b><p>Local contact area, geometry, deformation, shear, and fingertip wrench.</p></article><article><b>Joint-torque sensing</b><p>Distributed actuator effort, transmitted load, and active force generation through the full hand.</p></article></div>
-            <figure className="paper-figure" id="data-flow"><video className="teaser-video" controls muted loop preload="metadata" poster="/placeholders/robot-hand.jpg" aria-label="PACE model data-flow placeholder"><source src="/placeholders/robot-hand-demo.mp4" type="video/mp4"/></video><figcaption>Video 2. Data-flow placeholder. The final animation will synchronize camera frames, tactile maps, joint-torque traces, physical tokens, predicted compliance offsets, and the resulting hand response through one closed-loop timestep.</figcaption></figure>
+          <section id="method"><h2>Method</h2>
+            <p className="method-lead">HACo extends a GR00T-style vision–language–action policy from motion generation to closed-loop dexterous force control. Instead of treating haptic feedback as a late action correction, HACo grounds the action-denoising process in fused fingertip tactile and joint-torque observations. The policy jointly denoises a compliant action and an intent bias, allowing task-directed motion and contact-responsive regulation to be learned within one action expert.</p>
+            <figure className="paper-figure" id="architecture"><div className="architecture-frame"><Image src="/method/haco-architecture.png" alt="HACo architecture with a Qwen3-VLM backbone, repeated action-expert blocks, fingertip tactile and joint-torque fusion, compliance cross-attention, and compliant-action and intent-bias outputs" width={1630} height={1390} priority/></div><figcaption>Figure 1. HACo architecture. A Qwen3-VLM backbone supplies language and visual context to a repeated action expert. Fused fingertip tactile and joint-torque tokens enter every block through compliance cross-attention and a gated residual update. The expert jointly denoises the compliant action and intent bias.</figcaption></figure>
+
+            <div className="method-detail">
+              <h3>Multimodal action denoising</h3>
+              <p>The text encoder and image encoder are coupled by the Qwen3-VLM backbone, producing language and visual tokens that condition the action expert through separate cross-attention stages. Robot state is embedded by a state encoder, while noisy compliant-action and intent-bias tokens initialize the action suffix. Within each of the <em>N</em> repeated blocks, the suffix first attends to language, exchanges information through action self-attention, and then attends to visual observations. This preserves the pretrained policy&apos;s semantic and visuomotor reasoning while exposing the evolving action representation to physical feedback.</p>
+            </div>
+
+            <div className="method-detail">
+              <h3>Whole-hand haptic fusion</h3>
+              <p>HACo represents dexterous contact with two complementary signals. Fingertip tactile observations encode localized contact geometry, deformation, pressure, and shear, whereas joint torque captures distributed load transmission and the hand&apos;s active effort beyond the tactile sensing surface. Modality-specific MLPs map both histories into token sequences, and a haptic-fusion module couples them into a shared physical context. The resulting tokens describe not only where contact occurs, but also how force propagates through the articulated hand.</p>
+            </div>
+
+            <div className="method-detail">
+              <h3>Compliance-grounded action expert</h3>
+              <p>After language, action, and vision attention, each block queries the fused haptic tokens through compliance cross-attention. A gated MLP converts the attended physical context into a residual update, so haptic feedback modulates action generation only when it is relevant and does so repeatedly throughout denoising rather than at the output alone. The final suffix is decoded into two coupled predictions: the <em>compliant action</em> executed by the robot and an <em>intent bias</em> used as auxiliary supervision to separate task-directed intent from compliance-mediated adjustment. This formulation turns active force regulation into a learned joint-space prediction problem, avoiding explicit contact-parameter estimation and hand Jacobian inversion.</p>
+            </div>
+            <figure className="paper-figure" id="data-flow"><video className="teaser-video" controls muted loop preload="metadata" poster="/placeholders/robot-hand.jpg" aria-label="HACo model data-flow placeholder"><source src="/placeholders/robot-hand-demo.mp4" type="video/mp4"/></video><figcaption>Video 2. Data-flow placeholder. The final animation will synchronize camera frames, tactile maps, joint-torque traces, haptic tokens, predicted compliance intent, and the resulting hand response through one closed-loop timestep.</figcaption></figure>
           </section>
 
           <section id="benchmark"><h2>Real-World Force Benchmark</h2><p>The benchmark organizes everyday manipulation by the physical role that determines success. This section is also the primary inference-demo gallery: each task will show an autonomous rollout together with its task-specific success definition.</p>
@@ -189,10 +250,10 @@ export default function Home() {
 
           <section id="failures"><h2>Failure Cases &amp; Limitations</h2><p>Failure cases will be grouped by the part of the closed loop that breaks. Each final example should pair the failed rollout with synchronized tactile, torque, and compliance-offset traces so the diagnosis is supported by evidence.</p><div className="failure-grid">{failures.map(failure => <article className="failure-card" key={failure.type}><video controls muted loop preload="metadata" poster="/placeholders/robot-hand.jpg" aria-label={`${failure.title} failure placeholder`}><source src="/placeholders/robot-hand-demo.mp4" type="video/mp4"/></video><div className="failure-card__copy"><span className="failure-card__type">{failure.type}</span><h3>{failure.title}</h3><p>{failure.description}</p></div></article>)}</div><div className="failure-note"><p><strong>Planned reporting rule.</strong> Categories are provisional until evaluation. Public failure demos should be consecutive, unedited trials rather than hand-selected isolated frames.</p></div></section>
 
-          <section id="citation"><h2>Citation</h2><p>PACE is currently an anonymous working draft. Public citation information will be updated with the preprint.</p><pre className="bibtex">{`@misc{pace2027,\n  title  = {PACE: Physically Grounded Active Compliance for\n            Dexterous Force Control},\n  author = {Anonymous Authors},\n  year   = {2027}\n}`}</pre><p className="asset-credit">Temporary image: Oak Ridge National Laboratory, “Robotic hand,” CC BY 2.0. Temporary video: Giacomo Alessandroni, “Hand-made robotic arm with Arduino,” CC BY-SA 4.0; clipped and transcoded locally. Both will be replaced by project-owned media.</p></section>
+          <section id="citation"><h2>Citation</h2><p>HACo is currently an anonymous working draft. Public citation information will be updated with the preprint.</p><pre className="bibtex">{`@misc{haco2027,\n  title  = {HACo: Haptic Active Compliance for\n            Dexterous Force Control},\n  author = {Anonymous Authors},\n  year   = {2027}\n}`}</pre><p className="asset-credit">Temporary image: Oak Ridge National Laboratory, “Robotic hand,” CC BY 2.0. Temporary video: Giacomo Alessandroni, “Hand-made robotic arm with Arduino,” CC BY-SA 4.0; clipped and transcoded locally. Both will be replaced by project-owned media.</p></section>
         </article>
       </div></section>
     </main>
-    <footer className="footer"><span>PACE · INTERNAL WORKING PAGE</span><span>All experiment cells intentionally blank until verified.</span><a href="#top">Back to top ↑</a></footer>
+    <footer className="footer"><span>HACo · INTERNAL WORKING PAGE</span><span>All experiment cells intentionally blank until verified.</span><a href="#top">Back to top ↑</a></footer>
   </>;
 }
