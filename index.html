@@ -3,20 +3,19 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="description" content="HACo: Haptic Active Compliance for Dexterous Force Control">
-  <meta property="og:title" content="HACo · Haptic Active Compliance">
-  <meta property="og:description" content="Closing the tactile–force loop for contact-rich dexterous manipulation.">
+  <meta name="description" content="HACo learns force-regulating actions from fingertip tactile and joint-torque feedback for contact-rich dexterous manipulation.">
+  <meta property="og:title" content="Learning Haptic Active Compliance for Force-Aware Dexterous Manipulation">
+  <meta property="og:description" content="HACo learns force-regulating actions from fingertip tactile and joint-torque feedback.">
   <meta property="og:image" content="https://opendrivelab.github.io/Haco/public/og.png">
-  <title>HACo · Haptic Active Compliance</title>
-  <link rel="stylesheet" href="app/globals.css?v=20260831-method-2">
+  <title>Learning Haptic Active Compliance for Force-Aware Dexterous Manipulation</title>
+  <link rel="stylesheet" href="app/globals.css?v=20260910-title-spacing-3">
 </head>
 <body>
   <main>
     <section class="hero-cover" id="top">
-      <video autoplay muted loop playsinline controls preload="metadata" poster="public/placeholders/robot-hand.jpg" aria-label="HACo overview video placeholder">
-        <source src="public/placeholders/robot-hand-demo.mp4" type="video/mp4">
+      <video autoplay muted loop playsinline controls preload="metadata" aria-label="HACo demonstration video">
+        <source src="/videos/hero/HACo_ICRA2027_demo_v22_green_continuous.mp4" type="video/mp4">
       </video>
-      <span class="hero-placeholder-label">Hero video placeholder · final five-task montage</span>
       <a class="scroll-cue" href="#article">Scroll to explore ↓</a>
     </section>
 
@@ -24,30 +23,36 @@
       <span class="legacy-anchor" id="paper" aria-hidden="true"></span>
       <div class="article-layout">
         <aside class="article-outline" aria-label="Article outline"><nav>
-          <a href="#title">Title</a>
-          <a href="#abstract">Abstract</a>
-          <a href="#contributions">Contributions</a>
-          <a href="#method">Method</a>
-          <a data-level="2" href="#architecture">Architecture</a>
-          <a data-level="2" href="#data-flow">Data flow</a>
-          <a href="#benchmark">Benchmark</a>
-          <a href="#results">Results</a>
-          <a data-level="2" href="#main-comparison">Main comparison</a>
-          <a data-level="2" href="#perception">Haptic perception</a>
-          <a data-level="2" href="#compliance">Active compliance</a>
-          <a data-level="2" href="#integration">Compliance grounding</a>
-          <a data-level="2" href="#wrist-camera">Wrist cameras</a>
-          <a data-level="2" href="#posttraining-scaling">Post-training scaling</a>
-          <a href="#failures">Failure cases</a>
-          <a href="#citation">Citation</a>
+          <div class="outline-group"><span class="outline-group__label">Overview</span><div class="outline-group__links">
+            <a class="outline-link is-active" href="#abstract" aria-current="location"><span class="outline-link__index">01</span><span>Abstract</span></a>
+            <a class="outline-link" href="#contributions"><span class="outline-link__index">02</span><span>Contributions</span></a>
+          </div></div>
+          <div class="outline-group"><span class="outline-group__label">System</span><div class="outline-group__links">
+            <a class="outline-link" href="#hardware"><span class="outline-link__index">03</span><span>Hardware</span></a>
+            <a class="outline-link" href="#method"><span class="outline-link__index">04</span><span>Method</span></a>
+            <a class="outline-link outline-link--sub" href="#architecture"><span class="outline-link__index">·</span><span>Architecture</span></a>
+            <a class="outline-link outline-link--sub" href="#force-regulated-demonstrations"><span class="outline-link__index">·</span><span>Force-regulated demos</span></a>
+            <a class="outline-link outline-link--sub" href="#compliant-action-learning"><span class="outline-link__index">·</span><span>Compliant action learning</span></a>
+          </div></div>
+          <div class="outline-group"><span class="outline-group__label">Evaluation</span><div class="outline-group__links">
+            <a class="outline-link" href="#benchmark"><span class="outline-link__index">05</span><span>Benchmark</span></a>
+            <a class="outline-link" href="#results"><span class="outline-link__index">06</span><span>Experiments</span></a>
+            <a class="outline-link outline-link--sub" href="#main-comparison"><span class="outline-link__index">·</span><span>Main comparison</span></a>
+            <a class="outline-link outline-link--sub" href="#perception"><span class="outline-link__index">·</span><span>Haptic sensing</span></a>
+            <a class="outline-link outline-link--sub" href="#compliance"><span class="outline-link__index">·</span><span>Compliance learning</span></a>
+            <a class="outline-link outline-link--sub" href="#integration"><span class="outline-link__index">·</span><span>Grounding</span></a>
+            <a class="outline-link outline-link--sub" href="#wrist-camera"><span class="outline-link__index">·</span><span>Wrist cameras</span></a>
+          </div></div>
+          <div class="outline-group"><span class="outline-group__label">Resources</span><div class="outline-group__links">
+            <a class="outline-link" href="#failures"><span class="outline-link__index">07</span><span>Failure cases</span></a>
+            <a class="outline-link" href="#citation"><span class="outline-link__index">08</span><span>Citation</span></a>
+          </div></div>
         </nav></aside>
 
         <article class="article-shell">
           <header class="title-block" id="title">
-            <div class="venue">PROJECT PAGE · ICLR 2027 WORKING DRAFT</div>
-            <h1><span class="title-acronym"><span class="title-h">H</span><span class="title-a">A</span><span class="title-c">C</span><span class="title-o">o</span>:</span> <span class="title-h">H</span>aptic <span class="title-a">A</span>ctive <span class="title-c">C</span><span class="title-o">o</span>mpliance for Dexterous Force Control</h1>
-            <p class="authors">Anonymous authors</p>
-            <p class="affiliation">Under review · Internal experiment planning page</p>
+            <h1>Learning <span class="title-h">H</span>aptic <span class="title-a">A</span>ctive <span class="title-c">C</span><span class="title-o">o</span>mpliance for Force-Aware Dexterous Manipulation</h1>
+            <p class="authors">Naisheng Ye, Yinzhe Zhou, Junkai Zhao, Yuhang Lu<br>Checheng Yu, Zhenjie Yang, Pengwei Wang, and Hongyang Li</p>
             <div class="article-links">
               <a class="article-link disabled" href="#" aria-disabled="true" data-url-placeholder="page" onclick="return false">☁ Page</a>
               <a class="article-link disabled" href="#" aria-disabled="true" data-url-placeholder="paper" onclick="return false">▤ Paper</a>
@@ -56,62 +61,54 @@
           </header>
 
           <section id="abstract">
-            <h2>Abstract</h2>
-            <div class="abstract-language" lang="en">
-              <h3>English</h3>
-              <p>Contact-rich dexterous manipulation requires robots to generate precise motions while actively regulating forces across evolving multi-finger, multi-contact interactions. Yet existing tactile-augmented manipulation policies use tactile as an additional observation or action-refinement signal for kinematic control, leaving the loop from haptic perception to active force control incomplete. Compliance control enables interaction forces to be regulated through motion references, but conventional model-based formulations scale poorly to dexterous hands.</p>
-              <p>We introduce <strong>HACo</strong>, a <strong>Haptic Active Compliance</strong> policy for dexterous force control. HACo integrates fingertip tactile and joint-torque feedback as complementary haptic observations of contact and load states. A <strong>Compliance Grounding Module</strong> conditions action generation on the evolving haptic state through gated compliance attention, while <strong>compliance-intent supervision</strong> teaches the policy to represent the force-producing component within each unified joint command. HACo directly generates active compliance actions that jointly encode desired motion and force regulation, enabling closed-loop force control without explicit contact modeling.</p>
-              <p>We further introduce a real-world benchmark spanning multi-contact friction, tangential interaction, fragile curved-surface contact, rotational torque, and deformable-object manipulation. Experiments demonstrate that HACo consistently outperforms visuomotor and visuotactile action policies, while ablations validate the contributions of haptic perception, compliance grounding, and active compliance action formulation.</p>
-            </div>
-            <div class="abstract-language abstract-language--zh" lang="zh-CN">
-              <h3>中文</h3>
-              <p>接触丰富的灵巧操作要求机器人在不断变化的多指、多点接触中生成准确运动，并主动调节作用力。然而，现有触觉增强操作策略通常将触觉作为运动学控制的额外观测或动作修正信号，使从触觉感知到主动力控制的闭环仍不完整。柔顺控制使机器人能够通过运动参考调节交互作用力，但传统的模型化方法难以扩展到灵巧手。</p>
-              <p>我们提出 <strong>HACo</strong>，一种面向灵巧力控制的 <strong>Haptic Active Compliance</strong> 策略。HACo 将指尖触觉与关节力矩反馈整合为接触状态和载荷状态的互补触觉观测。<strong>Compliance Grounding Module</strong> 通过 gated compliance attention，使动作生成持续受当前触觉状态调节；同时，<strong>compliance-intent supervision</strong> 引导策略表征统一关节指令中用于产生作用力的分量。HACo 直接生成统一表达期望运动与力调节的主动柔顺动作，从而实现无需显式接触建模的闭环力控制。</p>
-              <p>我们进一步构建了一个真实世界 benchmark，覆盖多接触摩擦、切向作用、高曲率脆弱接触、旋转力矩和可变形物体交互。实验表明，HACo 持续优于视觉运动和视触觉动作策略；消融实验进一步验证了触觉感知、柔顺状态注入和主动柔顺动作设计的作用。</p>
-            </div>
-          </section>
+<h2>Abstract</h2>
+<div class="abstract-language" lang="en">
+<p>Contact-rich dexterous manipulation requires robots to generate precise motions while actively regulating forces across evolving multi-contact interactions. Haptic observations reveal contact, but learning to act on them also requires supervision that captures the controller reference needed to sustain or adjust that contact. Nominal teleoperation commands can encode excessive loading, whereas observed configurations omit motion constrained by the object.</p>
+<p>We introduce <strong>HACo</strong>, a <strong>Haptic Active Compliance</strong> policy that learns force-regulating actions directly from haptic feedback. Compliance-regulated teleoperation converts operator commands into controller-executable compliant actions that preserve motion intent while regulating interaction loads. HACo learns these compliant actions directly, with their command–state discrepancy providing auxiliary compliant-intent supervision. It integrates fingertip tactile and joint-torque feedback as complementary observations of local contact and load transmission through the articulated hand. A <strong>Compliance Grounding Module</strong> grounds action generation in the evolving haptic state through gated compliance attention, enabling closed-loop force regulation without explicit online contact modeling.</p>
+<p>We evaluate HACo on a real-world benchmark spanning multi-contact friction, tangential interaction, fragile curved-surface contact, rotational torque, and deformable-object manipulation. Across 20 trials per task, HACo achieves an 83% mean progress score versus 35% for the strongest evaluated baseline. HACo variants without compliant-intent supervision and with nominal action targets achieve 73% and 59%, respectively. These results motivate learning both executable references and their contact-dependent command–state relationship.</p>
+</div>
+</section>
+<section id="contributions">
+<h2>Contributions</h2>
+<ul>
+<li><strong>Complementary haptic perception.</strong> We couple fingertip tactile sensing with joint-torque feedback to represent both local contact and loads transmitted through the articulated hand.</li>
+<li><strong>Active compliance learning.</strong> We learn from force-regulated demonstrations by combining controller-executable compliant actions, compliant-intent supervision, and haptic-grounded action generation.</li>
+<li><strong>A real-world dexterous force benchmark.</strong> We evaluate force regulation across multi-contact friction, tangential interaction, fragile curved-surface contact, rotational torque, and deformable-object manipulation.</li>
+</ul>
+</section>
+<section id="hardware">
+  <h2>Hardware setup</h2>
+  <p>Our platform combines two UR5 arms with Sharpa dexterous hands, wrist-mounted RealSense D405 cameras, and a head-mounted ZED Mini. For teleoperation, MANUS Metagloves Pro capture finger articulation while VIVE Trackers provide wrist poses; the hands also supply fingertip tactile and joint-torque feedback during data collection and execution.</p>
+  <figure class="paper-figure"><div class="architecture-frame"><img src="/hardware/fig05-platform.png" width="2400" height="2063" loading="lazy" alt="HACo hardware platform with dual UR5 arms, Sharpa hands, cameras, MANUS gloves, and VIVE trackers"></div><figcaption>Hardware platform for haptic-aware dexterous manipulation.</figcaption></figure>
+</section>
 
-          <section id="contributions">
-            <h2>Contributions</h2>
-            <ul>
-              <li><strong>Haptic perception.</strong> HACo integrates fingertip tactile and joint-torque feedback as complementary haptic observations of contact and load states, providing a unified representation of dexterous interaction.</li>
-              <li><strong>Active compliance.</strong> HACo combines gated compliance grounding with compliance-intent supervision to condition action generation on evolving haptic feedback and explicitly learn the force-producing component within unified joint commands.</li>
-              <li><strong>Real-World Dexterous Force Benchmark.</strong> We introduce five real-world tasks spanning multi-contact friction, tangential interaction, fragile curved-surface contact, rotational torque, and deformable-object manipulation.</li>
-            </ul>
-          </section>
-
-          <section id="method">
-            <h2>Method</h2>
-            <p class="method-lead">HACo extends a GR00T-style vision–language–action policy from motion generation to closed-loop dexterous force control. Instead of treating haptic feedback as a late action correction, HACo grounds the action-denoising process in fused fingertip tactile and joint-torque observations. The policy jointly denoises a compliant action and an intent bias, allowing task-directed motion and contact-responsive regulation to be learned within one action expert.</p>
-
-            <figure class="paper-figure" id="architecture">
-              <div class="architecture-frame">
-                <img src="public/method/haco-architecture.png?v=20260831-2" width="1630" height="1390" alt="HACo architecture with a Qwen3-VLM backbone, repeated action-expert blocks, fingertip tactile and joint-torque fusion, compliance cross-attention, and compliant-action and intent-bias outputs">
-              </div>
-              <figcaption>Figure 1. HACo architecture. A Qwen3-VLM backbone supplies language and visual context to a repeated action expert. Fused fingertip tactile and joint-torque tokens enter every block through compliance cross-attention and a gated residual update. The expert jointly denoises the compliant action and intent bias.</figcaption>
-            </figure>
-
-            <div class="method-detail">
-              <h3>Multimodal action denoising</h3>
-              <p>The text encoder and image encoder are coupled by the Qwen3-VLM backbone, producing language and visual tokens that condition the action expert through separate cross-attention stages. Robot state is embedded by a state encoder, while noisy compliant-action and intent-bias tokens initialize the action suffix. Within each of the <em>N</em> repeated blocks, the suffix first attends to language, exchanges information through action self-attention, and then attends to visual observations. This preserves the pretrained policy's semantic and visuomotor reasoning while exposing the evolving action representation to physical feedback.</p>
-            </div>
-
-            <div class="method-detail">
-              <h3>Whole-hand haptic fusion</h3>
-              <p>HACo represents dexterous contact with two complementary signals. Fingertip tactile observations encode localized contact geometry, deformation, pressure, and shear, whereas joint torque captures distributed load transmission and the hand's active effort beyond the tactile sensing surface. Modality-specific MLPs map both histories into token sequences, and a haptic-fusion module couples them into a shared physical context. The resulting tokens describe not only where contact occurs, but also how force propagates through the articulated hand.</p>
-            </div>
-
-            <div class="method-detail">
-              <h3>Compliance-grounded action expert</h3>
-              <p>After language, action, and vision attention, each block queries the fused haptic tokens through compliance cross-attention. A gated MLP converts the attended physical context into a residual update, so haptic feedback modulates action generation only when it is relevant and does so repeatedly throughout denoising rather than at the output alone. The final suffix is decoded into two coupled predictions: the <em>compliant action</em> executed by the robot and an <em>intent bias</em> used as auxiliary supervision to separate task-directed intent from compliance-mediated adjustment. This formulation turns active force regulation into a learned joint-space prediction problem, avoiding explicit contact-parameter estimation and hand Jacobian inversion.</p>
-            </div>
-
-            <figure class="paper-figure" id="data-flow">
-              <video class="teaser-video" controls muted loop preload="metadata" poster="public/placeholders/robot-hand.jpg" aria-label="HACo model data-flow placeholder">
-                <source src="public/placeholders/robot-hand-demo.mp4" type="video/mp4">
-              </video>
-              <figcaption>Video 2. Data-flow placeholder. The final animation will synchronize camera frames, tactile maps, joint-torque traces, haptic tokens, predicted compliance intent, and the resulting hand response through one closed-loop timestep.</figcaption>
-            </figure>
+<section id="method">
+<h2>Method</h2>
+<p class="method-lead">HACo maps multi-view images, language, robot state, and haptic histories to executable compliant-action chunks. Compliant intent is predicted only as auxiliary supervision.</p>
+<div class="method-detail" id="architecture">
+<h3>Architecture</h3>
+<p>Multi-view images, language, and robot state condition a flow-based action expert. For each finger, HACo fuses fingertip wrench and deformation features with torque signals from the same kinematic chain, then models interactions across digits as structured haptic memory. The Compliance Grounding Module lets action features query this memory through gated cross-attention. The model predicts executable compliant actions together with auxiliary compliant intent; only the compliant actions are sent to the robot.</p>
+</div>
+<figure class="paper-figure">
+<div class="architecture-frame"><img src="/method/haco-architecture.png?v=20260910-fig02" width="2780" height="1036" alt="HACo model architecture: structured haptic perception and gated compliance attention condition a flow-based action expert"></div>
+<figcaption>HACo architecture with haptic-grounded action generation.</figcaption>
+</figure>
+<div class="method-detail" id="force-regulated-demonstrations">
+<h3>Force-regulated demonstrations</h3>
+<p>Motion retargeting provides nominal arm and hand references. Cartesian admittance and fingertip force regulation adjust them before execution, preserving task motion while limiting excessive loads. The resulting compliant references are recorded with synchronized visual, state, tactile, and torque observations.</p>
+</div>
+<figure class="paper-figure">
+<div class="architecture-frame"><img src="/method/compliant-teleoperation.png" width="2400" height="2084" loading="lazy" alt="Compliance-regulated teleoperation: retargeting, arm admittance, hand force regulation, and synchronized recording"></div>
+<figcaption>Compliance-regulated teleoperation for force-aware demonstrations.</figcaption>
+</figure>
+<div class="method-detail" id="compliant-action-learning">
+<h3>Compliant action learning</h3>
+<p>Observed motion omits commands blocked by contact, while nominal commands can apply excessive force. HACo instead learns the regulated compliant command. Its discrepancy from the observed hand state, <strong>Δq<sup>ci</sup><sub>t</sub> = q<sup>cmp</sup><sub>t</sub> − q<sup>obs</sup><sub>t</sub></strong>, supplies compliant-intent supervision during conditional flow matching and is never added to the executed action.</p>
+</div>
+<figure class="paper-figure">
+<div class="architecture-frame"><img src="/method/compliant-intent.png" width="2400" height="1644" loading="lazy" alt="Nominal, observed, and compliant hand configurations under contact, illustrating compliant intent and the correction to the nominal command"></div>
+<figcaption>Nominal, observed, and compliant hand configurations under contact.</figcaption>
+</figure>
           </section>
 
           <section id="benchmark">
@@ -128,44 +125,84 @@
                 <button class="demo-pill" type="button" data-task="cap">Unscrew cap</button>
                 <button class="demo-pill" type="button" data-task="paste">Squeeze toothpaste</button>
               </div>
-              <div class="demo-view"><video id="benchmark-video" controls muted loop preload="metadata" poster="public/placeholders/robot-hand.jpg" aria-label="Selected benchmark rollout placeholder"><source src="public/placeholders/robot-hand-demo.mp4" type="video/mp4"></video></div>
-              <div class="demo-caption"><b id="demo-title">Insert poker · multi-contact friction</b><p id="demo-description">Begin with two playing cards lying on the black platform. Use the right hand to pick up one card and transfer it to the left hand. Hold the first card upright and steady with the left hand. Then use the right hand to pick up the remaining card, align it with the card held in the left hand, and slide it into the same grip so that both cards are held together. Finish with both cards securely held in the left hand and the right hand released. Do not bend or drop either card.</p></div>
+              <div class="demo-view"><video id="benchmark-video" autoplay controls muted loop playsinline preload="metadata" aria-label="Insert poker rollout 2"><source src="public/videos/benchmark/poker/2.mp4" type="video/mp4"></video></div>
+              <div class="demo-caption"><div class="demo-caption__head"><b id="demo-title">Insert poker · multi-contact friction</b><div class="demo-video-pills" id="demo-video-pills" role="tablist" aria-label="Insert poker rollout selection"></div></div><p id="demo-description">Begin with two playing cards lying on the black platform. Use the right hand to pick up one card and transfer it to the left hand. Hold the first card upright and steady with the left hand. Then use the right hand to pick up the remaining card, align it with the card held in the left hand, and slide it into the same grip so that both cards are held together. Finish with both cards securely held in the left hand and the right hand released. Do not bend or drop either card.</p></div>
             </div>
           </section>
 
           <section id="results">
             <h2>Experiments</h2>
-            <div class="result-intro"><p>Every planned study uses the same five-task benchmark and reports a macro mean. A grouped chart summarizes the main comparison, horizontal bars summarize component ablations, and paired scaling curves separate post-training compute from demonstration count.</p></div>
-            <div class="placeholder-warning">Planning state: tables are complete, but every numerical cell is intentionally empty.</div>
 
             <div class="experiment-group" id="main-comparison">
-              <h3>Main comparison</h3><p>Seven representative dexterous-manipulation and VLA approaches evaluated under a shared task protocol.</p>
+              <h3>Main comparison</h3><p>Five representative dexterous-manipulation approaches evaluated under a shared task protocol.</p>
               <figure class="result-figure">
                 <div class="result-figure__frame">
-                  <div class="result-figure__note"><span>Task success rate by method</span><span>Reported task results shown; remaining bars are placeholders</span></div>
+                  <div class="result-figure__note"><span>Task success rate by method</span><span>20 evaluation trials per task</span></div>
                   <div class="grouped-legend"><span><i style="--c:var(--task-poker)"></i>Insert poker</span><span><i style="--c:var(--task-book)"></i>Open book</span><span><i style="--c:var(--task-balloon)"></i>Draw on balloon</span><span><i style="--c:var(--task-cap)"></i>Unscrew cap</span><span><i style="--c:var(--task-paste)"></i>Squeeze toothpaste</span></div>
                   <div class="grouped-chart">
-                    <div class="model-group"><div class="model-bars"><i class="task-bar" tabindex="0" role="img" data-value="62%" data-tooltip="Insert poker · 62%" aria-label="Insert poker: 62% illustrative placeholder" style="--h:62%;--c:var(--task-poker)"></i><i class="task-bar" tabindex="0" role="img" data-value="76%" data-tooltip="Open book · 76%" aria-label="Open book: 76% illustrative placeholder" style="--h:76%;--c:var(--task-book)"></i><i class="task-bar" tabindex="0" role="img" data-value="55%" data-tooltip="Draw on balloon · 55%" aria-label="Draw on balloon: 55% illustrative placeholder" style="--h:55%;--c:var(--task-balloon)"></i><i class="task-bar" tabindex="0" role="img" data-value="68%" data-tooltip="Unscrew cap · 68%" aria-label="Unscrew cap: 68% illustrative placeholder" style="--h:68%;--c:var(--task-cap)"></i><i class="task-bar" tabindex="0" role="img" data-value="60%" data-tooltip="Squeeze toothpaste · 60%" aria-label="Squeeze toothpaste: 60% illustrative placeholder" style="--h:60%;--c:var(--task-paste)"></i></div><span class="model-label">DECO</span></div>
-                    <div class="model-group"><div class="model-bars"><i class="task-bar" tabindex="0" role="img" data-value="62%" data-tooltip="Insert poker · 62%" aria-label="Insert poker: 62% illustrative placeholder" style="--h:62%;--c:var(--task-poker)"></i><i class="task-bar" tabindex="0" role="img" data-value="76%" data-tooltip="Open book · 76%" aria-label="Open book: 76% illustrative placeholder" style="--h:76%;--c:var(--task-book)"></i><i class="task-bar" tabindex="0" role="img" data-value="55%" data-tooltip="Draw on balloon · 55%" aria-label="Draw on balloon: 55% illustrative placeholder" style="--h:55%;--c:var(--task-balloon)"></i><i class="task-bar" tabindex="0" role="img" data-value="68%" data-tooltip="Unscrew cap · 68%" aria-label="Unscrew cap: 68% illustrative placeholder" style="--h:68%;--c:var(--task-cap)"></i><i class="task-bar" tabindex="0" role="img" data-value="60%" data-tooltip="Squeeze toothpaste · 60%" aria-label="Squeeze toothpaste: 60% illustrative placeholder" style="--h:60%;--c:var(--task-paste)"></i></div><span class="model-label">ViTacFormer</span></div>
-                    <div class="model-group"><div class="model-bars"><i class="task-bar" tabindex="0" role="img" data-value="62%" data-tooltip="Insert poker · 62%" aria-label="Insert poker: 62% illustrative placeholder" style="--h:62%;--c:var(--task-poker)"></i><i class="task-bar" tabindex="0" role="img" data-value="76%" data-tooltip="Open book · 76%" aria-label="Open book: 76% illustrative placeholder" style="--h:76%;--c:var(--task-book)"></i><i class="task-bar" tabindex="0" role="img" data-value="55%" data-tooltip="Draw on balloon · 55%" aria-label="Draw on balloon: 55% illustrative placeholder" style="--h:55%;--c:var(--task-balloon)"></i><i class="task-bar" tabindex="0" role="img" data-value="68%" data-tooltip="Unscrew cap · 68%" aria-label="Unscrew cap: 68% illustrative placeholder" style="--h:68%;--c:var(--task-cap)"></i><i class="task-bar" tabindex="0" role="img" data-value="60%" data-tooltip="Squeeze toothpaste · 60%" aria-label="Squeeze toothpaste: 60% illustrative placeholder" style="--h:60%;--c:var(--task-paste)"></i></div><span class="model-label">T-Rex</span></div>
-                    <div class="model-group"><div class="model-bars"><i class="task-bar" tabindex="0" role="img" data-value="15%" data-tooltip="Insert poker · 15%" aria-label="Insert poker: 3/20, 15%" style="--h:15%;--c:var(--task-poker)"></i><i class="task-bar" tabindex="0" role="img" data-value="20%" data-tooltip="Open book · 20%" aria-label="Open book: 4/20, 20%" style="--h:20%;--c:var(--task-book)"></i><i class="task-bar" tabindex="0" role="img" data-value="5%" data-tooltip="Draw on balloon · 5%" aria-label="Draw on balloon: 1/20, 5%" style="--h:5%;--c:var(--task-balloon)"></i><i class="task-bar" tabindex="0" role="img" data-value="60%" data-tooltip="Unscrew cap · 60%" aria-label="Unscrew cap: 12/20, 60%" style="--h:60%;--c:var(--task-cap)"></i><i class="task-bar" tabindex="0" role="img" data-value="60%" data-tooltip="Squeeze toothpaste · 60%" aria-label="Squeeze toothpaste: 60% illustrative placeholder" style="--h:60%;--c:var(--task-paste)"></i></div><span class="model-label">GR00T</span></div>
-                    <div class="model-group"><div class="model-bars"><i class="task-bar" tabindex="0" role="img" data-value="62%" data-tooltip="Insert poker · 62%" aria-label="Insert poker: 62% illustrative placeholder" style="--h:62%;--c:var(--task-poker)"></i><i class="task-bar" tabindex="0" role="img" data-value="76%" data-tooltip="Open book · 76%" aria-label="Open book: 76% illustrative placeholder" style="--h:76%;--c:var(--task-book)"></i><i class="task-bar" tabindex="0" role="img" data-value="55%" data-tooltip="Draw on balloon · 55%" aria-label="Draw on balloon: 55% illustrative placeholder" style="--h:55%;--c:var(--task-balloon)"></i><i class="task-bar" tabindex="0" role="img" data-value="68%" data-tooltip="Unscrew cap · 68%" aria-label="Unscrew cap: 68% illustrative placeholder" style="--h:68%;--c:var(--task-cap)"></i><i class="task-bar" tabindex="0" role="img" data-value="60%" data-tooltip="Squeeze toothpaste · 60%" aria-label="Squeeze toothpaste: 60% illustrative placeholder" style="--h:60%;--c:var(--task-paste)"></i></div><span class="model-label">CGP</span></div>
-                    <div class="model-group"><div class="model-bars"><i class="task-bar" tabindex="0" role="img" data-value="62%" data-tooltip="Insert poker · 62%" aria-label="Insert poker: 62% illustrative placeholder" style="--h:62%;--c:var(--task-poker)"></i><i class="task-bar" tabindex="0" role="img" data-value="76%" data-tooltip="Open book · 76%" aria-label="Open book: 76% illustrative placeholder" style="--h:76%;--c:var(--task-book)"></i><i class="task-bar" tabindex="0" role="img" data-value="55%" data-tooltip="Draw on balloon · 55%" aria-label="Draw on balloon: 55% illustrative placeholder" style="--h:55%;--c:var(--task-balloon)"></i><i class="task-bar" tabindex="0" role="img" data-value="68%" data-tooltip="Unscrew cap · 68%" aria-label="Unscrew cap: 68% illustrative placeholder" style="--h:68%;--c:var(--task-cap)"></i><i class="task-bar" tabindex="0" role="img" data-value="60%" data-tooltip="Squeeze toothpaste · 60%" aria-label="Squeeze toothpaste: 60% illustrative placeholder" style="--h:60%;--c:var(--task-paste)"></i></div><span class="model-label">DexTeleop</span></div>
-                    <div class="model-group is-ours"><div class="model-bars"><i class="task-bar" tabindex="0" role="img" data-value="90%" data-tooltip="Insert poker · 90%" aria-label="Insert poker: 18/20, 90%" style="--h:90%;--c:var(--task-poker)"></i><i class="task-bar" tabindex="0" role="img" data-value="85%" data-tooltip="Open book · 85%" aria-label="Open book: 17/20, 85%" style="--h:85%;--c:var(--task-book)"></i><i class="task-bar" tabindex="0" role="img" data-value="60%" data-tooltip="Draw on balloon · 60%" aria-label="Draw on balloon: 12/20, 60%" style="--h:60%;--c:var(--task-balloon)"></i><i class="task-bar" tabindex="0" role="img" data-value="95%" data-tooltip="Unscrew cap · 95%" aria-label="Unscrew cap: 19/20, 95%" style="--h:95%;--c:var(--task-cap)"></i><i class="task-bar" tabindex="0" role="img" data-value="60%" data-tooltip="Squeeze toothpaste · 60%" aria-label="Squeeze toothpaste: 60% illustrative placeholder" style="--h:60%;--c:var(--task-paste)"></i></div><span class="model-label">HACo</span></div>
+                    <div class="model-group"><div class="model-bars"><i class="task-bar" tabindex="0" role="img" data-value="15%" data-tooltip="Insert poker · 15%" aria-label="Insert poker: 3/20, 15%" style="--h:15%;--c:var(--task-poker)"></i><i class="task-bar" tabindex="0" role="img" data-value="0%" data-tooltip="Open book · 0%" aria-label="Open book: 0/20, 0%" style="--h:0%;--c:var(--task-book)"></i><i class="task-bar" tabindex="0" role="img" data-value="5%" data-tooltip="Draw on balloon · 5%" aria-label="Draw on balloon: 1/20, 5%" style="--h:5%;--c:var(--task-balloon)"></i><i class="task-bar" tabindex="0" role="img" data-value="35%" data-tooltip="Unscrew cap · 35%" aria-label="Unscrew cap: 7/20, 35%" style="--h:35%;--c:var(--task-cap)"></i><i class="task-bar" tabindex="0" role="img" data-value="20%" data-tooltip="Squeeze toothpaste · 20%" aria-label="Squeeze toothpaste: 4/20, 20%" style="--h:20%;--c:var(--task-paste)"></i></div><span class="model-label">GR00T</span></div>
+                    <div class="model-group"><div class="model-bars"><i class="task-bar" tabindex="0" role="img" data-value="25%" data-tooltip="Insert poker · 25%" aria-label="Insert poker: 5/20, 25%" style="--h:25%;--c:var(--task-poker)"></i><i class="task-bar" tabindex="0" role="img" data-value="10%" data-tooltip="Open book · 10%" aria-label="Open book: 2/20, 10%" style="--h:10%;--c:var(--task-book)"></i><i class="task-bar" tabindex="0" role="img" data-value="5%" data-tooltip="Draw on balloon · 5%" aria-label="Draw on balloon: 1/20, 5%" style="--h:5%;--c:var(--task-balloon)"></i><i class="task-bar" tabindex="0" role="img" data-value="45%" data-tooltip="Unscrew cap · 45%" aria-label="Unscrew cap: 9/20, 45%" style="--h:45%;--c:var(--task-cap)"></i><i class="task-bar" tabindex="0" role="img" data-value="25%" data-tooltip="Squeeze toothpaste · 25%" aria-label="Squeeze toothpaste: 5/20, 25%" style="--h:25%;--c:var(--task-paste)"></i></div><span class="model-label">GR00T + Tactile</span></div>
+                    <div class="model-group"><div class="model-bars"><i class="task-bar" tabindex="0" role="img" data-value="0%" data-tooltip="Insert poker · 0%" aria-label="Insert poker: 0/20, 0%" style="--h:0%;--c:var(--task-poker)"></i><i class="task-bar" tabindex="0" role="img" data-value="5%" data-tooltip="Open book · 5%" aria-label="Open book: 1/20, 5%" style="--h:5%;--c:var(--task-book)"></i><i class="task-bar" tabindex="0" role="img" data-value="0%" data-tooltip="Draw on balloon · 0%" aria-label="Draw on balloon: 0/20, 0%" style="--h:0%;--c:var(--task-balloon)"></i><i class="task-bar" tabindex="0" role="img" data-value="10%" data-tooltip="Unscrew cap · 10%" aria-label="Unscrew cap: 2/20, 10%" style="--h:10%;--c:var(--task-cap)"></i><i class="task-bar" tabindex="0" role="img" data-value="5%" data-tooltip="Squeeze toothpaste · 5%" aria-label="Squeeze toothpaste: 1/20, 5%" style="--h:5%;--c:var(--task-paste)"></i></div><span class="model-label">ViTacFormer</span></div>
+                    <div class="model-group"><div class="model-bars"><i class="task-bar" tabindex="0" role="img" data-value="20%" data-tooltip="Insert poker · 20%" aria-label="Insert poker: 4/20, 20%" style="--h:20%;--c:var(--task-poker)"></i><i class="task-bar" tabindex="0" role="img" data-value="30%" data-tooltip="Open book · 30%" aria-label="Open book: 6/20, 30%" style="--h:30%;--c:var(--task-book)"></i><i class="task-bar" tabindex="0" role="img" data-value="10%" data-tooltip="Draw on balloon · 10%" aria-label="Draw on balloon: 2/20, 10%" style="--h:10%;--c:var(--task-balloon)"></i><i class="task-bar" tabindex="0" role="img" data-value="60%" data-tooltip="Unscrew cap · 60%" aria-label="Unscrew cap: 12/20, 60%" style="--h:60%;--c:var(--task-cap)"></i><i class="task-bar" tabindex="0" role="img" data-value="55%" data-tooltip="Squeeze toothpaste · 55%" aria-label="Squeeze toothpaste: 11/20, 55%" style="--h:55%;--c:var(--task-paste)"></i></div><span class="model-label">T-Rex</span></div>
+                    <div class="model-group is-ours"><div class="model-bars"><i class="task-bar" tabindex="0" role="img" data-value="90%" data-tooltip="Insert poker · 90%" aria-label="Insert poker: 18/20, 90%" style="--h:90%;--c:var(--task-poker)"></i><i class="task-bar" tabindex="0" role="img" data-value="85%" data-tooltip="Open book · 85%" aria-label="Open book: 17/20, 85%" style="--h:85%;--c:var(--task-book)"></i><i class="task-bar" tabindex="0" role="img" data-value="70%" data-tooltip="Draw on balloon · 70%" aria-label="Draw on balloon: 14/20, 70%" style="--h:70%;--c:var(--task-balloon)"></i><i class="task-bar" tabindex="0" role="img" data-value="95%" data-tooltip="Unscrew cap · 95%" aria-label="Unscrew cap: 19/20, 95%" style="--h:95%;--c:var(--task-cap)"></i><i class="task-bar" tabindex="0" role="img" data-value="75%" data-tooltip="Squeeze toothpaste · 75%" aria-label="Squeeze toothpaste: 15/20, 75%" style="--h:75%;--c:var(--task-paste)"></i></div><span class="model-label">HACo</span></div>
                   </div>
                 </div>
-                <figcaption>Figure 2. Planned grouped comparison. Each method contains five task-level success bars; unreported task heights remain layout placeholders and are not experimental results.</figcaption>
+                <figcaption>Figure 2. Main comparison across five force-sensitive tasks.</figcaption>
               </figure>
+              <!-- Radar chart temporarily hidden
+              <figure class="result-figure radar-figure">
+                <div class="result-figure__frame radar-figure__frame">
+                  <div class="result-figure__note"><span>Force-regulation profile</span><span>Normalized progress score</span></div>
+                  <svg class="radar-chart" viewBox="0 0 560 430" role="img" aria-labelledby="radar-title-static radar-description-static" style="display:block;width:min(100%,620px);height:auto;margin:0 auto;overflow:visible">
+                    <title id="radar-title-static">Five-task progress profile for HACo and evaluated baselines</title>
+                    <desc id="radar-description-static">A five-axis radar chart comparing normalized progress scores for friction, tangential interaction, fragile contact, rotational torque, and deformable-object manipulation. HACo leads on all five axes.</desc>
+                    <g class="radar-grid" fill="rgba(255,255,255,.42)" stroke="rgba(54,73,67,.16)" stroke-width="1">
+                      <polygon points="280,180 318,207.6 303.5,252.4 256.5,252.4 242,207.6"></polygon>
+                      <polygon points="280,140 356.1,195.3 327,284.7 233,284.7 203.9,195.3"></polygon>
+                      <polygon points="280,100 394.1,182.9 350.5,317.1 209.5,317.1 165.9,182.9"></polygon>
+                      <polygon points="280,60 432.2,170.6 374.1,349.4 185.9,349.4 127.8,170.6"></polygon>
+                      <line x1="280" y1="220" x2="280" y2="60"></line>
+                      <line x1="280" y1="220" x2="432.2" y2="170.6"></line>
+                      <line x1="280" y1="220" x2="374.1" y2="349.4"></line>
+                      <line x1="280" y1="220" x2="185.9" y2="349.4"></line>
+                      <line x1="280" y1="220" x2="127.8" y2="170.6"></line>
+                      <text x="287" y="184" fill="rgba(54,73,67,.46)" stroke="none" font-size="9">25%</text><text x="287" y="144" fill="rgba(54,73,67,.46)" stroke="none" font-size="9">50%</text><text x="287" y="104" fill="rgba(54,73,67,.46)" stroke="none" font-size="9">75%</text><text x="287" y="64" fill="rgba(54,73,67,.46)" stroke="none" font-size="9">100%</text>
+                    </g>
+                    <g class="radar-series-group">
+                      <polygon class="radar-series" tabindex="0" aria-label="GR00T: 15, 0, 5, 35, 20 percent across the five benchmark tasks" points="280,196 280,220 284.7,226.5 247.1,265.3 249.6,210.1" fill="#8097a1" fill-opacity=".07" stroke="#8097a1" stroke-width="2.2" style="--radar-color:#8097a1;--radar-delay:0ms"></polygon>
+                      <polygon class="radar-series" tabindex="0" aria-label="GR00T plus Tactile: 25, 10, 5, 45, 25 percent across the five benchmark tasks" points="280,180 295.2,215.1 284.7,226.5 237.7,278.2 242,207.6" fill="#d48149" fill-opacity=".07" stroke="#d48149" stroke-width="2.2" style="--radar-color:#d48149;--radar-delay:70ms"></polygon>
+                      <polygon class="radar-series" tabindex="0" aria-label="ViTacFormer: 0, 5, 0, 10, 5 percent across the five benchmark tasks" points="280,220 287.6,217.5 280,220 270.6,232.9 272.4,217.5" fill="#5f9466" fill-opacity=".07" stroke="#5f9466" stroke-width="2.2" style="--radar-color:#5f9466;--radar-delay:140ms"></polygon>
+                      <polygon class="radar-series" tabindex="0" aria-label="T-Rex: 20, 30, 10, 60, 55 percent across the five benchmark tasks" points="280,188 325.7,205.2 289.4,232.9 223.6,297.7 196.3,192.8" fill="#447bb6" fill-opacity=".07" stroke="#447bb6" stroke-width="2.2" style="--radar-color:#447bb6;--radar-delay:210ms"></polygon>
+                      <polygon class="radar-series is-haco" tabindex="0" aria-label="HACo: 90, 85, 70, 95, 75 percent across the five benchmark tasks" points="280,76 409.3,178 345.8,310.6 190.7,342.9 165.9,182.9" fill="#367e68" fill-opacity=".15" stroke="#367e68" stroke-width="4" style="--radar-color:#367e68;--radar-delay:280ms"></polygon>
+                    </g>
+                    <g class="radar-axis-labels" aria-hidden="true" fill="#25302c" font-size="13" font-weight="700">
+                      <text x="280" y="27" text-anchor="middle">Friction</text>
+                      <text x="475" y="170" text-anchor="start">Tangential</text>
+                      <text x="414" y="402" text-anchor="middle">Fragile contact</text>
+                      <text x="146" y="402" text-anchor="middle">Rotational torque</text>
+                      <text x="85" y="170" text-anchor="end">Deformable</text>
+                    </g>
+                  </svg>
+                  <div class="radar-legend" aria-label="Compared methods" style="display:flex;flex-wrap:wrap;justify-content:center;gap:9px 17px">
+                    <span style="display:inline-flex;align-items:center;gap:6px"><i style="display:inline-block;width:18px;height:3px;border-radius:999px;background:#8097a1"></i>GR00T</span>
+                    <span style="display:inline-flex;align-items:center;gap:6px"><i style="display:inline-block;width:18px;height:3px;border-radius:999px;background:#d48149"></i>GR00T + Tactile</span>
+                    <span style="display:inline-flex;align-items:center;gap:6px"><i style="display:inline-block;width:18px;height:3px;border-radius:999px;background:#5f9466"></i>ViTacFormer</span>
+                    <span style="display:inline-flex;align-items:center;gap:6px"><i style="display:inline-block;width:18px;height:3px;border-radius:999px;background:#447bb6"></i>T-Rex</span>
+                    <span class="is-haco" style="display:inline-flex;align-items:center;gap:6px;color:#367e68;font-weight:800"><i style="display:inline-block;width:18px;height:3px;border-radius:999px;background:#367e68"></i>HACo</span>
+                  </div>
+                  <div class="radar-highlight"><span>HACo mean</span><strong>83%</strong></div>
+                </div>
+                <figcaption>Task-wise progress profile across five force-sensitive interaction regimes.</figcaption>
+              </figure>
+              -->
               <div class="table-wrap"><table class="result-table">
                 <thead><tr><th>Method</th><th>Insert poker</th><th>Open book</th><th>Draw on balloon</th><th>Unscrew cap</th><th>Squeeze toothpaste</th><th>Mean</th></tr></thead>
                 <tbody>
-                  <tr><th>DECO</th><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
-                  <tr><th>ViTacFormer</th><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
-                  <tr><th>T-Rex</th><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
-                  <tr><th>GR00T</th><td>3/20</td><td>4/20</td><td>1/20</td><td>12/20</td><td>—</td><td>—</td></tr>
-                  <tr><th>CGP</th><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
-                  <tr><th>DexTeleop</th><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
-                  <tr class="ours"><th>HACo</th><td>18/20</td><td>17/20</td><td>12/20</td><td>19/20</td><td>—</td><td>—</td></tr>
+                  <tr><th>GR00T</th><td>3/20</td><td>0/20</td><td>1/20</td><td>7/20</td><td>4/20</td><td>15%</td></tr>
+                  <tr><th>GR00T + Tactile</th><td>5/20</td><td>2/20</td><td>1/20</td><td>9/20</td><td>5/20</td><td>22%</td></tr>
+                  <tr><th>ViTacFormer</th><td>0/20</td><td>1/20</td><td>0/20</td><td>2/20</td><td>1/20</td><td>4%</td></tr>
+                  <tr><th>T-Rex</th><td>4/20</td><td>6/20</td><td>2/20</td><td>12/20</td><td>11/20</td><td>35%</td></tr>
+                  <tr class="ours"><th>HACo</th><td>18/20</td><td>17/20</td><td>14/20</td><td>19/20</td><td>15/20</td><td>83%</td></tr>
                 </tbody>
               </table></div><p class="table-caption">Table 1. Main comparison across the five real-world force-sensitive tasks.</p>
             </div>
@@ -173,145 +210,146 @@
             <div class="experiment-group" id="perception">
               <h3>Haptic Perception Ablation</h3><p>Isolate the contributions of fingertip tactile and joint-torque feedback and compare factorized and coupled haptic representations.</p>
               <figure class="result-figure">
-                <div class="result-figure__frame"><div class="result-figure__note"><span>Macro mean by perception configuration</span><span>Awaiting complete five-task means</span></div><div class="horizontal-bars">
-                  <div class="horizontal-bar"><span class="horizontal-bar__label">w/o Haptic Feedback</span><div class="horizontal-bar__track"><i class="horizontal-bar__fill"></i></div><span class="horizontal-bar__value">TBD</span></div>
-                  <div class="horizontal-bar"><span class="horizontal-bar__label">w/o Torque Feedback</span><div class="horizontal-bar__track"><i class="horizontal-bar__fill"></i></div><span class="horizontal-bar__value">TBD</span></div>
-                  <div class="horizontal-bar"><span class="horizontal-bar__label">w/o Tactile Feedback</span><div class="horizontal-bar__track"><i class="horizontal-bar__fill"></i></div><span class="horizontal-bar__value">TBD</span></div>
-                  <div class="horizontal-bar"><span class="horizontal-bar__label">w/o Coupled Encoding</span><div class="horizontal-bar__track"><i class="horizontal-bar__fill"></i></div><span class="horizontal-bar__value">TBD</span></div>
-                  <div class="horizontal-bar is-ours"><span class="horizontal-bar__label">HACo</span><div class="horizontal-bar__track"><i class="horizontal-bar__fill"></i></div><span class="horizontal-bar__value">TBD</span></div>
-                </div></div><figcaption>Figure 3. Planned horizontal summary of the perception ablation; the full table retains task-wise results.</figcaption>
+                <div class="result-figure__frame"><div class="result-figure__note"><span>Macro mean by perception configuration</span><span>Complete five-task results</span></div><div class="horizontal-bars">
+                  <div class="horizontal-bar"><span class="horizontal-bar__label">w/o Haptic Feedback</span><div class="horizontal-bar__track"><i class="horizontal-bar__fill" style="--value:27%"></i></div><span class="horizontal-bar__value">27%</span></div>
+                  <div class="horizontal-bar"><span class="horizontal-bar__label">w/o Tactile Feedback</span><div class="horizontal-bar__track"><i class="horizontal-bar__fill" style="--value:45%"></i></div><span class="horizontal-bar__value">45%</span></div>
+                  <div class="horizontal-bar"><span class="horizontal-bar__label">w/o Torque Feedback</span><div class="horizontal-bar__track"><i class="horizontal-bar__fill" style="--value:68%"></i></div><span class="horizontal-bar__value">68%</span></div>
+                  <div class="horizontal-bar"><span class="horizontal-bar__label">w/o Coupled Encoding</span><div class="horizontal-bar__track"><i class="horizontal-bar__fill" style="--value:70%"></i></div><span class="horizontal-bar__value">70%</span></div>
+                  <div class="horizontal-bar is-ours"><span class="horizontal-bar__label">HACo</span><div class="horizontal-bar__track"><i class="horizontal-bar__fill" style="--value:83%"></i></div><span class="horizontal-bar__value">83%</span></div>
+                </div></div><figcaption>Figure 3. Haptic perception ablation.</figcaption>
               </figure>
               <div class="table-wrap"><table class="result-table">
                 <thead><tr><th>Haptic perception</th><th>Insert poker</th><th>Open book</th><th>Draw on balloon</th><th>Unscrew cap</th><th>Squeeze toothpaste</th><th>Mean</th></tr></thead>
                 <tbody>
-                  <tr><th>w/o Haptic Feedback</th><td>—</td><td>—</td><td>—</td><td>13/20</td><td>—</td><td>—</td></tr>
-                  <tr><th>w/o Torque Feedback</th><td>—</td><td>—</td><td>—</td><td>16/20</td><td>—</td><td>—</td></tr>
-                  <tr><th>w/o Tactile Feedback</th><td>—</td><td>—</td><td>—</td><td>15/20</td><td>—</td><td>—</td></tr>
-                  <tr><th>w/o Coupled Encoding</th><td>—</td><td>—</td><td>—</td><td>18/20</td><td>—</td><td>—</td></tr>
-                  <tr class="ours"><th>HACo</th><td>—</td><td>—</td><td>—</td><td>19/20</td><td>—</td><td>—</td></tr>
+                  <tr><th>w/o Haptic Feedback</th><td>7/20</td><td>2/20</td><td>3/20</td><td>8/20</td><td>7/20</td><td>27%</td></tr>
+                  <tr><th>w/o Tactile Feedback</th><td>8/20</td><td>5/20</td><td>7/20</td><td>13/20</td><td>12/20</td><td>45%</td></tr>
+                  <tr><th>w/o Torque Feedback</th><td>15/20</td><td>16/20</td><td>11/20</td><td>14/20</td><td>12/20</td><td>68%</td></tr>
+                  <tr><th>w/o Coupled Encoding</th><td>17/20</td><td>14/20</td><td>12/20</td><td>13/20</td><td>14/20</td><td>70%</td></tr>
+                  <tr class="ours"><th>HACo</th><td>18/20</td><td>17/20</td><td>14/20</td><td>19/20</td><td>15/20</td><td>83%</td></tr>
                 </tbody>
               </table></div><p class="table-caption">Table 2. Haptic perception ablation across sensing modalities and representation strategies.</p>
             </div>
 
             <div class="experiment-group" id="compliance">
-              <h3>Active Compliance Ablation</h3><p>Hold haptic perception and compliance grounding fixed while varying compliance-intent supervision and the executed action formulation.</p>
-              <figure class="result-figure"><div class="result-figure__frame"><div class="result-figure__note"><span>Macro mean by active compliance formulation</span><span>Awaiting complete five-task means</span></div><div class="horizontal-bars">
-                <div class="horizontal-bar"><span class="horizontal-bar__label">w/o Active Compliance</span><div class="horizontal-bar__track"><i class="horizontal-bar__fill"></i></div><span class="horizontal-bar__value">TBD</span></div>
-                <div class="horizontal-bar"><span class="horizontal-bar__label">w/o Compliance-Intent Supervision</span><div class="horizontal-bar__track"><i class="horizontal-bar__fill"></i></div><span class="horizontal-bar__value">TBD</span></div>
-                <div class="horizontal-bar is-ours"><span class="horizontal-bar__label">HACo</span><div class="horizontal-bar__track"><i class="horizontal-bar__fill"></i></div><span class="horizontal-bar__value">TBD</span></div>
-              </div></div><figcaption>Figure 4. Planned horizontal summary of active compliance formulations.</figcaption></figure>
-              <div class="table-wrap"><table class="result-table">
-                <thead><tr><th>Active compliance</th><th>Insert poker</th><th>Open book</th><th>Draw on balloon</th><th>Unscrew cap</th><th>Squeeze toothpaste</th><th>Mean</th></tr></thead>
+              <h3>Compliance Learning Ablation</h3><p>Starting from nominal teleoperation targets, progressively introduce compliant actions generated by the compliance controller and auxiliary compliance-intent supervision.</p>
+              <figure class="result-figure"><div class="result-figure__frame"><div class="result-figure__note"><span>Macro mean by compliant-action learning stage</span><span>Complete five-task results</span></div><div class="horizontal-bars">
+                <div class="horizontal-bar"><span class="horizontal-bar__label">Nominal Action</span><div class="horizontal-bar__track"><i class="horizontal-bar__fill" style="--value:59%"></i></div><span class="horizontal-bar__value">59%</span></div>
+                <div class="horizontal-bar"><span class="horizontal-bar__label">Compliant Action</span><div class="horizontal-bar__track"><i class="horizontal-bar__fill" style="--value:73%"></i></div><span class="horizontal-bar__value">73%</span></div>
+                <div class="horizontal-bar is-ours"><span class="horizontal-bar__label">+ Compliance-Intent Supervision</span><div class="horizontal-bar__track"><i class="horizontal-bar__fill" style="--value:83%"></i></div><span class="horizontal-bar__value">83%</span></div>
+              </div></div><figcaption>Figure 4. Compliant-action learning ablation.</figcaption></figure>
+              <div class="table-wrap"><table class="result-table result-table--components">
+                <thead><tr><th>Configuration</th><th class="component-head">Compliant Action</th><th class="component-head component-head--cis">CIS</th><th>Insert poker</th><th>Open book</th><th>Draw on balloon</th><th>Unscrew cap</th><th>Squeeze toothpaste</th><th>Mean</th></tr></thead>
                 <tbody>
-                  <tr><th>w/o Active Compliance</th><td>—</td><td>—</td><td>—</td><td>16/20</td><td>—</td><td>—</td></tr>
-                  <tr><th>w/o Compliance-Intent Supervision</th><td>—</td><td>—</td><td>—</td><td>17/20</td><td>—</td><td>—</td></tr>
-                  <tr class="ours"><th>HACo</th><td>—</td><td>—</td><td>—</td><td>19/20</td><td>—</td><td>—</td></tr>
+                  <tr><th>Nominal Action</th><td class="component-cell">—</td><td class="component-cell component-cell--cis">—</td><td>12/20</td><td>11/20</td><td>9/20</td><td>14/20</td><td>13/20</td><td>59%</td></tr>
+                  <tr><th>Compliant Action</th><td class="component-cell is-enabled">✓</td><td class="component-cell component-cell--cis">—</td><td>15/20</td><td>15/20</td><td>13/20</td><td>16/20</td><td>14/20</td><td>73%</td></tr>
+                  <tr class="ours"><th>+ Compliance-Intent Supervision</th><td class="component-cell is-enabled">✓</td><td class="component-cell component-cell--cis is-enabled">✓</td><td>18/20</td><td>17/20</td><td>14/20</td><td>19/20</td><td>15/20</td><td>83%</td></tr>
                 </tbody>
-              </table></div><p class="table-caption">Table 3. Active compliance ablation across nominal, direct compliant, and complete action formulations.</p>
+              </table></div><p class="table-caption">Table 3. Progressive composition of compliant-action learning and compliance-intent supervision.</p>
             </div>
 
             <div class="experiment-group" id="integration">
               <h3>Compliance Grounding Ablation</h3><p>Hold haptic observations and active compliance actions fixed while varying how the haptic state conditions action generation.</p>
-              <figure class="result-figure"><div class="result-figure__frame"><div class="result-figure__note"><span>Macro mean by compliance grounding mechanism</span><span>Awaiting results</span></div><div class="horizontal-bars">
-                <div class="horizontal-bar"><span class="horizontal-bar__label">Action-Suffix Fusion</span><div class="horizontal-bar__track"><i class="horizontal-bar__fill"></i></div><span class="horizontal-bar__value">TBD</span></div>
-                <div class="horizontal-bar"><span class="horizontal-bar__label">Visuo–Haptic Fusion</span><div class="horizontal-bar__track"><i class="horizontal-bar__fill"></i></div><span class="horizontal-bar__value">TBD</span></div>
-                <div class="horizontal-bar"><span class="horizontal-bar__label">Compliance Attention</span><div class="horizontal-bar__track"><i class="horizontal-bar__fill"></i></div><span class="horizontal-bar__value">TBD</span></div>
-                <div class="horizontal-bar is-ours"><span class="horizontal-bar__label">Gated Compliance Attention</span><div class="horizontal-bar__track"><i class="horizontal-bar__fill"></i></div><span class="horizontal-bar__value">TBD</span></div>
-              </div></div><figcaption>Figure 5. Planned horizontal summary of compliance grounding mechanisms.</figcaption></figure>
+              <figure class="result-figure"><div class="result-figure__frame"><div class="result-figure__note"><span>Macro mean by compliance grounding mechanism</span><span>Complete five-task results</span></div><div class="horizontal-bars">
+                <div class="horizontal-bar"><span class="horizontal-bar__label">Visuo–Haptic Fusion</span><div class="horizontal-bar__track"><i class="horizontal-bar__fill" style="--value:41%"></i></div><span class="horizontal-bar__value">41%</span></div>
+                <div class="horizontal-bar"><span class="horizontal-bar__label">Action-Suffix Fusion</span><div class="horizontal-bar__track"><i class="horizontal-bar__fill" style="--value:47%"></i></div><span class="horizontal-bar__value">47%</span></div>
+                <div class="horizontal-bar"><span class="horizontal-bar__label">Compliance Attention</span><div class="horizontal-bar__track"><i class="horizontal-bar__fill" style="--value:66%"></i></div><span class="horizontal-bar__value">66%</span></div>
+                <div class="horizontal-bar is-ours"><span class="horizontal-bar__label">Gated Compliance Attention</span><div class="horizontal-bar__track"><i class="horizontal-bar__fill" style="--value:83%"></i></div><span class="horizontal-bar__value">83%</span></div>
+              </div></div><figcaption>Figure 5. Compliance grounding ablation.</figcaption></figure>
               <div class="table-wrap"><table class="result-table">
                 <thead><tr><th>Compliance grounding</th><th>Insert poker</th><th>Open book</th><th>Draw on balloon</th><th>Unscrew cap</th><th>Squeeze toothpaste</th><th>Mean</th></tr></thead>
                 <tbody>
-                  <tr><th>Action-Suffix Fusion</th><td>—</td><td>—</td><td>—</td><td>12/20</td><td>—</td><td>—</td></tr>
-                  <tr><th>Visuo–Haptic Fusion</th><td>—</td><td>—</td><td>—</td><td>13/20</td><td>—</td><td>—</td></tr>
-                  <tr><th>Compliance Attention</th><td>—</td><td>—</td><td>—</td><td>18/20</td><td>—</td><td>—</td></tr>
-                  <tr class="ours"><th>Gated Compliance Attention</th><td>—</td><td>—</td><td>—</td><td>19/20</td><td>—</td><td>—</td></tr>
+                  <tr><th>Visuo–Haptic Fusion</th><td>10/20</td><td>6/20</td><td>7/20</td><td>10/20</td><td>8/20</td><td>41%</td></tr>
+                  <tr><th>Action-Suffix Fusion</th><td>14/20</td><td>9/20</td><td>6/20</td><td>11/20</td><td>7/20</td><td>47%</td></tr>
+                  <tr><th>Compliance Attention</th><td>14/20</td><td>15/20</td><td>11/20</td><td>16/20</td><td>10/20</td><td>66%</td></tr>
+                  <tr class="ours"><th>Gated Compliance Attention</th><td>18/20</td><td>17/20</td><td>14/20</td><td>19/20</td><td>15/20</td><td>83%</td></tr>
                 </tbody>
               </table></div><p class="table-caption">Table 4. Compliance grounding ablation across haptic-state conditioning mechanisms.</p>
             </div>
 
             <div class="experiment-group" id="wrist-camera">
               <h3>Wrist-Camera Ablation</h3><p>A compact observation study that isolates the contribution of wrist-mounted visual coverage while keeping haptic sensing and the HACo policy fixed.</p>
-              <figure class="result-figure"><div class="result-figure__frame"><div class="result-figure__note"><span>Macro mean with and without wrist cameras</span><span>Awaiting results</span></div><div class="horizontal-bars">
-                <div class="horizontal-bar"><span class="horizontal-bar__label">w/o Wrist Cameras</span><div class="horizontal-bar__track"><i class="horizontal-bar__fill"></i></div><span class="horizontal-bar__value">TBD</span></div>
-                <div class="horizontal-bar is-ours"><span class="horizontal-bar__label">HACo</span><div class="horizontal-bar__track"><i class="horizontal-bar__fill"></i></div><span class="horizontal-bar__value">TBD</span></div>
-              </div></div><figcaption>Figure 6. Planned compact summary of the wrist-camera observation ablation.</figcaption></figure>
+              <figure class="result-figure"><div class="result-figure__frame"><div class="result-figure__note"><span>Macro mean with and without wrist cameras</span><span>Complete five-task results</span></div><div class="horizontal-bars">
+                <div class="horizontal-bar"><span class="horizontal-bar__label">w/o Wrist Cameras</span><div class="horizontal-bar__track"><i class="horizontal-bar__fill" style="--value:76%"></i></div><span class="horizontal-bar__value">76%</span></div>
+                <div class="horizontal-bar is-ours"><span class="horizontal-bar__label">w/ Wrist Cameras</span><div class="horizontal-bar__track"><i class="horizontal-bar__fill" style="--value:83%"></i></div><span class="horizontal-bar__value">83%</span></div>
+              </div></div><figcaption>Figure 6. Wrist-camera ablation.</figcaption></figure>
               <div class="table-wrap"><table class="result-table">
                 <thead><tr><th>Camera observation</th><th>Insert poker</th><th>Open book</th><th>Draw on balloon</th><th>Unscrew cap</th><th>Squeeze toothpaste</th><th>Mean</th></tr></thead>
                 <tbody>
-                  <tr><th>w/o Wrist Cameras</th><td>—</td><td>—</td><td>—</td><td>18/20</td><td>—</td><td>—</td></tr>
-                  <tr class="ours"><th>HACo</th><td>—</td><td>—</td><td>—</td><td>19/20</td><td>—</td><td>—</td></tr>
+                  <tr><th>w/o Wrist Cameras</th><td>13/20</td><td>15/20</td><td>14/20</td><td>18/20</td><td>16/20</td><td>76%</td></tr>
+                  <tr class="ours"><th>w/ Wrist Cameras</th><td>18/20</td><td>17/20</td><td>14/20</td><td>19/20</td><td>15/20</td><td>83%</td></tr>
                 </tbody>
               </table></div><p class="table-caption">Table 5. Wrist-camera observation ablation.</p>
             </div>
 
-            <div class="experiment-group" id="posttraining-scaling">
-              <h3>Post-training compute and data scaling</h3>
-              <p>Evaluate one representative task with two controlled sweeps. The left panel fixes 100 post-training demonstrations and varies optimization steps; the right fixes 50k steps and varies the number of demonstrations.</p>
-              <figure class="result-figure scaling-figure">
-                <div class="result-figure__note"><span>Single-task success rate · shared 0–100% scale</span><span>Representative task: TBD · awaiting results</span></div>
-                <div class="scaling-panels">
-                  <section class="scaling-panel" aria-label="Optimization scaling: 100 demonstrations fixed">
-                    <div class="scaling-panel__header"><b>Optimization scaling</b><span>100 demonstrations fixed</span></div>
-                    <div class="scaling-plot"><div class="scaling-y-axis"><span>100</span><span>50</span><span>0</span></div><div class="scaling-canvas">
-                      <div class="scaling-area" style="--shape:polygon(0 66%, 25% 52%, 50% 39%, 75% 29%, 100% 23%, 100% 100%, 0 100%)"></div>
-                      <i class="scaling-dot" tabindex="0" role="img" data-value="34%" aria-label="10k: 34% illustrative placeholder" style="--x:0%;--y:34%"></i><i class="scaling-dot" tabindex="0" role="img" data-value="48%" aria-label="20k: 48% illustrative placeholder" style="--x:25%;--y:48%"></i><i class="scaling-dot" tabindex="0" role="img" data-value="61%" aria-label="30k: 61% illustrative placeholder" style="--x:50%;--y:61%"></i><i class="scaling-dot" tabindex="0" role="img" data-value="71%" aria-label="40k: 71% illustrative placeholder" style="--x:75%;--y:71%"></i><i class="scaling-dot" tabindex="0" role="img" data-value="77%" aria-label="50k: 77% illustrative placeholder" style="--x:100%;--y:77%"></i>
-                    </div></div>
-                    <div class="scaling-x-labels"><span>10k</span><span>20k</span><span>30k</span><span>40k</span><span>50k</span></div>
-                    <div class="scaling-axis-title">Post-training steps</div>
-                  </section>
-                  <section class="scaling-panel" aria-label="Data scaling: 50k steps fixed">
-                    <div class="scaling-panel__header"><b>Data scaling</b><span>50k steps fixed</span></div>
-                    <div class="scaling-plot"><div class="scaling-y-axis"><span>100</span><span>50</span><span>0</span></div><div class="scaling-canvas">
-                      <div class="scaling-area" style="--shape:polygon(0 73%, 25% 57%, 50% 43%, 75% 31%, 100% 23%, 100% 100%, 0 100%)"></div>
-                      <i class="scaling-dot" tabindex="0" role="img" data-value="27%" aria-label="10 demonstrations: 27% illustrative placeholder" style="--x:0%;--y:27%"></i><i class="scaling-dot" tabindex="0" role="img" data-value="43%" aria-label="30 demonstrations: 43% illustrative placeholder" style="--x:25%;--y:43%"></i><i class="scaling-dot" tabindex="0" role="img" data-value="57%" aria-label="50 demonstrations: 57% illustrative placeholder" style="--x:50%;--y:57%"></i><i class="scaling-dot" tabindex="0" role="img" data-value="69%" aria-label="70 demonstrations: 69% illustrative placeholder" style="--x:75%;--y:69%"></i><i class="scaling-dot" tabindex="0" role="img" data-value="77%" aria-label="100 demonstrations: 77% illustrative placeholder" style="--x:100%;--y:77%"></i>
-                    </div></div>
-                    <div class="scaling-x-labels"><span>10</span><span>30</span><span>50</span><span>70</span><span>100</span></div>
-                    <div class="scaling-axis-title">Post-training demonstrations</div>
-                  </section>
-                </div>
-                <figcaption>Figure 7. Paired post-training scaling study on one representative task. Add uncertainty intervals once repeated evaluations are available; the trajectories shown here are layout placeholders only.</figcaption>
-              </figure>
-            </div>
           </section>
 
           <section id="failures">
             <h2>Failure Cases &amp; Limitations</h2>
-            <p>Failure cases will be grouped by the part of the closed loop that breaks. Each final example should pair the failed rollout with synchronized tactile, torque, and compliance-offset traces so the diagnosis is supported by evidence.</p>
+            <p>Representative unsuccessful rollouts reveal distinct limitations in contact-rich manipulation.</p>
             <div class="failure-grid">
-              <article class="failure-card"><video controls muted loop preload="metadata" poster="public/placeholders/robot-hand.jpg" aria-label="Perception ambiguity failure placeholder"><source src="public/placeholders/robot-hand-demo.mp4" type="video/mp4"></video><div class="failure-card__copy"><span class="failure-card__type">Failure F1 · Perception ambiguity</span><h3>Aliased multi-contact load</h3><p>Different contact configurations can produce similar joint-torque patterns, leading to an incorrect physical-state estimate.</p></div></article>
-              <article class="failure-card"><video controls muted loop preload="metadata" poster="public/placeholders/robot-hand.jpg" aria-label="Tactile blind spot failure placeholder"><source src="public/placeholders/robot-hand-demo.mp4" type="video/mp4"></video><div class="failure-card__copy"><span class="failure-card__type">Failure F2 · Sensing coverage</span><h3>Contact outside tactile regions</h3><p>Side or palm contacts may be visible only indirectly through torque and can remain poorly localized.</p></div></article>
-              <article class="failure-card"><video controls muted loop preload="metadata" poster="public/placeholders/robot-hand.jpg" aria-label="Response bandwidth failure placeholder"><source src="public/placeholders/robot-hand-demo.mp4" type="video/mp4"></video><div class="failure-card__copy"><span class="failure-card__type">Failure F3 · Control bandwidth</span><h3>Late or saturated correction</h3><p>Fast impacts or large disturbances can exceed policy update bandwidth or available joint actuation.</p></div></article>
-              <article class="failure-card"><video controls muted loop preload="metadata" poster="public/placeholders/robot-hand.jpg" aria-label="Out-of-distribution physics failure placeholder"><source src="public/placeholders/robot-hand-demo.mp4" type="video/mp4"></video><div class="failure-card__copy"><span class="failure-card__type">Failure F4 · Distribution shift</span><h3>Unseen physical regime</h3><p>Extreme friction, stiffness, deformation, or visually ambiguous task progress can fall outside the learned interaction distribution.</p></div></article>
+              <article class="failure-card"><video controls muted loop playsinline preload="metadata" aria-label="Open Book failure rollout"><source src="/videos/failures/open-book.mp4" type="video/mp4"></video><div class="failure-card__copy"><span class="failure-card__type">Failure F1 · Open Book</span><h3>Insufficient Tangential Separation</h3><p>Because the thumb fails to enter the middle of the page stack, it cannot establish enough tangential traction to separate the target section. The pages therefore move together instead of opening at the intended location.</p></div></article>
+              <article class="failure-card"><video controls muted loop playsinline preload="metadata" aria-label="Draw on Balloon failure rollout"><source src="/videos/failures/draw-on-balloon.mp4" type="video/mp4"></video><div class="failure-card__copy"><span class="failure-card__type">Failure F2 · Draw on Balloon</span><h3>Missed Contact Onset</h3><p>The balloon slips out of the left hand during drawing. This occurs because the right hand does not recognize that the marker has already made contact and continues its motion, creating a disturbance that exceeds the left hand’s stabilizing grip.</p></div></article>
+              <article class="failure-card"><video controls muted loop playsinline preload="metadata" aria-label="Insert Poker Cards failure rollout"><source src="/videos/failures/insert-poker.mp4" type="video/mp4"></video><div class="failure-card__copy"><span class="failure-card__type">Failure F3 · Insert Poker Cards</span><h3>Excessive Pickup Force</h3><p>Due to excessive normal pressure from two right-hand fingers, inter-card friction rises at pickup, causing two cards to be lifted as one stack rather than separating a single layer.</p></div></article>
+              <article class="failure-card"><video controls muted loop playsinline preload="metadata" aria-label="Squeeze Toothpaste failure rollout"><source src="/videos/failures/squeeze-toothpaste.mp4" type="video/mp4"></video><div class="failure-card__copy"><span class="failure-card__type">Failure F4 · Squeeze Toothpaste</span><h3>Nozzle–Brush Misalignment</h3><p>The toothpaste is dispensed beside the bristles instead of onto them. The reason is inaccurate nozzle–brush alignment: the policy produces the squeezing action without tightly coupling visual placement to haptic evidence of extrusion.</p></div></article>
             </div>
-            <div class="failure-note"><p><strong>Planned reporting rule.</strong> Categories are provisional until evaluation. Public failure demos should be consecutive, unedited trials rather than hand-selected isolated frames.</p></div>
           </section>
 
           <section id="citation">
             <h2>Citation</h2>
-            <p>HACo is currently an anonymous working draft. Public citation information will be updated with the preprint.</p>
+            <p>Citation details will be updated with the public preprint.</p>
             <pre class="bibtex">@misc{haco2027,
-  title  = {HACo: Haptic Active Compliance for
-            Dexterous Force Control},
+  title  = {Learning Haptic Active Compliance for
+            Force-Aware Dexterous Manipulation},
   author = {Anonymous Authors},
   year   = {2027}
 }</pre>
-            <p class="asset-credit">Temporary image: Oak Ridge National Laboratory, “Robotic hand,” CC BY 2.0. Temporary video: Giacomo Alessandroni, “Hand-made robotic arm with Arduino,” CC BY-SA 4.0; clipped and transcoded locally. Both will be replaced by project-owned media.</p>
           </section>
         </article>
       </div>
     </section>
   </main>
 
-  <footer class="footer"><span>HACo · INTERNAL WORKING PAGE</span><span>All experiment cells intentionally blank until verified.</span><a href="#top">Back to top ↑</a></footer>
+  <footer class="footer"><span>HACo · PROJECT PAGE</span><a href="#top">Back to top ↑</a></footer>
 
   <script>
     const demos = {
-      poker: ['Insert poker · multi-contact friction', 'Begin with two playing cards lying on the black platform. Use the right hand to pick up one card and transfer it to the left hand. Hold the first card upright and steady with the left hand. Then use the right hand to pick up the remaining card, align it with the card held in the left hand, and slide it into the same grip so that both cards are held together. Finish with both cards securely held in the left hand and the right hand released. Do not bend or drop either card.'],
-      book: ['Open book · tangential force', 'Begin with the closed book lying flat on the black platform. Use the left hand to separate and lift a thick section of pages near the middle of the book, then turn the section across the spine to open the book to an interior spread. Bring in the right hand to help guide the pages and press the book open and flat. Finish with both hands holding the selected pages flat for at least five seconds. Do not open only the front or back cover, move the book off the platform, or crease or tear any page.'],
-      balloon: ['Draw on balloon · curved fragile contact', 'Begin with the inflated yellow balloon and the black marker on the table. Gently pick up and steady the balloon with the left hand. Use the right hand to pick up the marker and draw a smiley face with two eyes and a curved smile, maintaining light and continuous contact with the balloon. After completing the drawing, set the marker down, lift and orient the balloon so that the finished face is clearly visible to the audience, and present it with the left hand while giving a thumbs-up beside it with the right hand. Do not let the balloon slip, deform excessively, or pop.'],
-      cap: ['Unscrew cap · rotational torque', 'Begin with the bottle standing upright on the white tray. Stabilize the bottle with the left hand while using the right hand to grasp the blue cap and turn it counterclockwise until it is completely detached. At the end, place the bottle upright on the white tray and set the cap down on the table beside the tray, then release both objects and move both hands away. Keep the bottle stable throughout, and do not crush, drop, or spill it.'],
-      paste: ['Squeeze toothpaste · deformable interaction', 'Regulate squeeze force and reason about material deformation to produce a controlled continuous output.']
+      poker: ['Insert poker · multi-contact friction', 'Begin with two playing cards lying on the black platform. Use the right hand to pick up one card and transfer it to the left hand. Hold the first card upright and steady with the left hand. Then use the right hand to pick up the remaining card, align it with the card held in the left hand, and slide it into the same grip so that both cards are held together. Finish with both cards securely held in the left hand and the right hand released. Do not bend or drop either card.', ['public/videos/benchmark/poker/2.mp4', 'public/videos/benchmark/poker/3.mp4']],
+      book: ['Open book · tangential force', 'Begin with the closed book lying flat on the black platform. Use the left hand to separate and lift a thick section of pages near the middle of the book, then turn the section across the spine to open the book to an interior spread. Bring in the right hand to help guide the pages and press the book open and flat. Finish with both hands holding the selected pages flat for at least five seconds. Do not open only the front or back cover, move the book off the platform, or crease or tear any page.', ['public/videos/benchmark/book/1.mp4', 'public/videos/benchmark/book/2.mp4', 'public/videos/benchmark/book/3.mp4', 'public/videos/benchmark/book/4.mp4']],
+      balloon: ['Draw on balloon · curved fragile contact', 'Begin with the inflated yellow balloon and the black marker on the table. Gently pick up and steady the balloon with the left hand. Use the right hand to pick up the marker and draw a smiley face with two eyes and a curved smile, maintaining light and continuous contact with the balloon. After completing the drawing, set the marker down, lift and orient the balloon so that the finished face is clearly visible to the audience, and present it with the left hand while giving a thumbs-up beside it with the right hand. Do not let the balloon slip, deform excessively, or pop.', ['public/videos/benchmark/balloon/1.mp4', 'public/videos/benchmark/balloon/2.mp4', 'public/videos/benchmark/balloon/3.mp4']],
+      cap: ['Unscrew cap · rotational torque', 'Begin with the bottle standing upright on the white tray. Stabilize the bottle with the left hand while using the right hand to grasp the blue cap and turn it counterclockwise until it is completely detached. At the end, place the bottle upright on the white tray and set the cap down on the table beside the tray, then release both objects and move both hands away. Keep the bottle stable throughout, and do not crush, drop, or spill it.', ['public/videos/benchmark/cap/1.mp4', 'public/videos/benchmark/cap/2.mp4', 'public/videos/benchmark/cap/3.mp4']],
+      paste: ['Squeeze toothpaste · deformable interaction', 'Begin with the purple toothbrush lying horizontally farther from the robot and the uncapped toothpaste tube positioned below it, closer to the robot. Use the right hand to pick up and hold the toothbrush with its bristles facing the toothpaste tube. Use the left hand to pick up the toothpaste tube, position the nozzle above the toothbrush bristles, and gently squeeze a small amount of toothpaste onto the bristles. Then place the toothpaste tube and toothbrush back on the table, release both objects, and move both hands away. Do not drop either object, damage the toothbrush, or dispense toothpaste anywhere except the bristles.', ['public/videos/benchmark/paste/1.mp4', 'public/videos/benchmark/paste/2.mp4', 'public/videos/benchmark/paste/3.mp4']]
     };
+    const benchmarkVideo = document.getElementById('benchmark-video');
+    const benchmarkVideoSource = benchmarkVideo.querySelector('source');
+    const demoVideoPills = document.getElementById('demo-video-pills');
+
+    function selectDemoVideo(task, index) {
+      const [title, , videos] = demos[task];
+      benchmarkVideoSource.src = videos[index];
+      benchmarkVideo.setAttribute('aria-label', `${title.split(' · ')[0]} rollout ${index + 1}`);
+      benchmarkVideo.load();
+      benchmarkVideo.play().catch(() => {});
+      demoVideoPills.querySelectorAll('.demo-video-pill').forEach((item, itemIndex) => {
+        item.classList.toggle('active', itemIndex === index);
+        item.setAttribute('aria-selected', itemIndex === index ? 'true' : 'false');
+      });
+    }
+
+    function renderDemoVideos(task) {
+      const [title, , videos] = demos[task];
+      demoVideoPills.replaceChildren();
+      demoVideoPills.setAttribute('aria-label', `${title.split(' · ')[0]} rollout selection`);
+      videos.forEach((source, index) => {
+        const button = document.createElement('button');
+        button.className = `demo-video-pill${index === 0 ? ' active' : ''}`;
+        button.type = 'button';
+        button.textContent = String(index + 1);
+        button.setAttribute('aria-selected', index === 0 ? 'true' : 'false');
+        button.addEventListener('click', () => selectDemoVideo(task, index));
+        demoVideoPills.append(button);
+      });
+      selectDemoVideo(task, 0);
+    }
     document.querySelectorAll('.demo-pill').forEach((button) => {
       button.addEventListener('click', () => {
         document.querySelectorAll('.demo-pill').forEach((item) => item.classList.remove('active'));
@@ -325,11 +363,10 @@
         const [title, description] = demos[button.dataset.task];
         document.getElementById('demo-title').textContent = title;
         document.getElementById('demo-description').textContent = description;
-        const video = document.getElementById('benchmark-video');
-        video.currentTime = 0;
-        video.play().catch(() => {});
+        renderDemoVideos(button.dataset.task);
       });
     });
+    renderDemoVideos('poker');
 
     const resultFigures = document.querySelectorAll('.result-figure');
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) {
@@ -345,6 +382,25 @@
       }, { threshold: 0.16, rootMargin: '0px 0px -7% 0px' });
       resultFigures.forEach((figure) => figureObserver.observe(figure));
     }
+
+    const outlineLinks = Array.from(document.querySelectorAll('.outline-link'));
+    const updateOutline = () => {
+      let current = outlineLinks[0]?.getAttribute('href')?.slice(1);
+      outlineLinks.forEach((link) => {
+        const id = link.getAttribute('href')?.slice(1);
+        const section = id && document.getElementById(id);
+        if (section && section.getBoundingClientRect().top <= window.innerHeight * .34) current = id;
+      });
+      outlineLinks.forEach((link) => {
+        const active = link.getAttribute('href') === '#' + current;
+        link.classList.toggle('is-active', active);
+        if (active) link.setAttribute('aria-current', 'location');
+        else link.removeAttribute('aria-current');
+      });
+    };
+    updateOutline();
+    window.addEventListener('scroll', updateOutline, { passive: true });
+    window.addEventListener('resize', updateOutline);
   </script>
 </body>
 </html>
