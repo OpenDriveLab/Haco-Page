@@ -54,15 +54,14 @@ const outlineGroups = [
     { id: 'contributions', label: 'Contributions', number: '02' },
   ] },
   { label: 'System', items: [
-    { id: 'hardware', label: 'Hardware', number: '03' },
-    { id: 'method', label: 'Method', number: '04' },
+    { id: 'method', label: 'Method', number: '03' },
     { id: 'architecture', label: 'Architecture', sub: true },
     { id: 'force-regulated-demonstrations', label: 'Force-regulated demos', sub: true },
     { id: 'compliant-action-learning', label: 'Compliant action learning', sub: true },
   ] },
   { label: 'Evaluation', items: [
-    { id: 'benchmark', label: 'Benchmark', number: '05' },
-    { id: 'results', label: 'Experiments', number: '06' },
+    { id: 'benchmark', label: 'Benchmark', number: '04' },
+    { id: 'results', label: 'Experiments', number: '05' },
     { id: 'main-comparison', label: 'Main comparison', sub: true },
     { id: 'perception', label: 'Haptic sensing', sub: true },
     { id: 'compliance', label: 'Compliance learning', sub: true },
@@ -70,8 +69,8 @@ const outlineGroups = [
     { id: 'wrist-camera', label: 'Wrist cameras', sub: true },
   ] },
   { label: 'Resources', items: [
-    { id: 'failures', label: 'Failure cases', number: '07' },
-    { id: 'citation', label: 'Citation', number: '08' },
+    { id: 'failures', label: 'Failure cases', number: '06' },
+    { id: 'citation', label: 'Citation', number: '07' },
   ] },
 ];
 
@@ -413,8 +412,6 @@ export default function Home() {
 <li><strong>A real-world dexterous force benchmark.</strong> We evaluate force regulation across multi-contact friction, tangential interaction, fragile curved-surface contact, rotational torque, and deformable-object manipulation.</li>
 </ul>
 </section>
-<section id="hardware"><h2>Hardware setup</h2><p>Our platform combines two UR5 arms with Sharpa dexterous hands, wrist-mounted RealSense D405 cameras, and a head-mounted ZED Mini. For teleoperation, MANUS Metagloves Pro capture finger articulation while VIVE Trackers provide wrist poses; the hands also supply fingertip tactile and joint-torque feedback during data collection and execution.</p><figure className="paper-figure"><div className="architecture-frame"><img src="/hardware/fig05-platform.png" width="2400" height="2063" loading="lazy" alt="HACo hardware platform with dual UR5 arms, Sharpa hands, cameras, MANUS gloves, and VIVE trackers"/></div><figcaption>Hardware platform for haptic-aware dexterous manipulation.</figcaption></figure></section>
-
 <section id="method">
 <h2>Method</h2>
 <p className="method-lead">HACo maps multi-view images, language, robot state, and haptic histories to executable compliant-action chunks. Compliant intent is predicted only as auxiliary supervision.</p>

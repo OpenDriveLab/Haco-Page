@@ -28,15 +28,14 @@
             <a class="outline-link" href="#contributions"><span class="outline-link__index">02</span><span>Contributions</span></a>
           </div></div>
           <div class="outline-group"><span class="outline-group__label">System</span><div class="outline-group__links">
-            <a class="outline-link" href="#hardware"><span class="outline-link__index">03</span><span>Hardware</span></a>
-            <a class="outline-link" href="#method"><span class="outline-link__index">04</span><span>Method</span></a>
+            <a class="outline-link" href="#method"><span class="outline-link__index">03</span><span>Method</span></a>
             <a class="outline-link outline-link--sub" href="#architecture"><span class="outline-link__index">·</span><span>Architecture</span></a>
             <a class="outline-link outline-link--sub" href="#force-regulated-demonstrations"><span class="outline-link__index">·</span><span>Force-regulated demos</span></a>
             <a class="outline-link outline-link--sub" href="#compliant-action-learning"><span class="outline-link__index">·</span><span>Compliant action learning</span></a>
           </div></div>
           <div class="outline-group"><span class="outline-group__label">Evaluation</span><div class="outline-group__links">
-            <a class="outline-link" href="#benchmark"><span class="outline-link__index">05</span><span>Benchmark</span></a>
-            <a class="outline-link" href="#results"><span class="outline-link__index">06</span><span>Experiments</span></a>
+            <a class="outline-link" href="#benchmark"><span class="outline-link__index">04</span><span>Benchmark</span></a>
+            <a class="outline-link" href="#results"><span class="outline-link__index">05</span><span>Experiments</span></a>
             <a class="outline-link outline-link--sub" href="#main-comparison"><span class="outline-link__index">·</span><span>Main comparison</span></a>
             <a class="outline-link outline-link--sub" href="#perception"><span class="outline-link__index">·</span><span>Haptic sensing</span></a>
             <a class="outline-link outline-link--sub" href="#compliance"><span class="outline-link__index">·</span><span>Compliance learning</span></a>
@@ -44,8 +43,8 @@
             <a class="outline-link outline-link--sub" href="#wrist-camera"><span class="outline-link__index">·</span><span>Wrist cameras</span></a>
           </div></div>
           <div class="outline-group"><span class="outline-group__label">Resources</span><div class="outline-group__links">
-            <a class="outline-link" href="#failures"><span class="outline-link__index">07</span><span>Failure cases</span></a>
-            <a class="outline-link" href="#citation"><span class="outline-link__index">08</span><span>Citation</span></a>
+            <a class="outline-link" href="#failures"><span class="outline-link__index">06</span><span>Failure cases</span></a>
+            <a class="outline-link" href="#citation"><span class="outline-link__index">07</span><span>Citation</span></a>
           </div></div>
         </nav></aside>
 
@@ -76,12 +75,6 @@
 <li><strong>A real-world dexterous force benchmark.</strong> We evaluate force regulation across multi-contact friction, tangential interaction, fragile curved-surface contact, rotational torque, and deformable-object manipulation.</li>
 </ul>
 </section>
-<section id="hardware">
-  <h2>Hardware setup</h2>
-  <p>Our platform combines two UR5 arms with Sharpa dexterous hands, wrist-mounted RealSense D405 cameras, and a head-mounted ZED Mini. For teleoperation, MANUS Metagloves Pro capture finger articulation while VIVE Trackers provide wrist poses; the hands also supply fingertip tactile and joint-torque feedback during data collection and execution.</p>
-  <figure class="paper-figure"><div class="architecture-frame"><img src="/hardware/fig05-platform.png" width="2400" height="2063" loading="lazy" alt="HACo hardware platform with dual UR5 arms, Sharpa hands, cameras, MANUS gloves, and VIVE trackers"></div><figcaption>Hardware platform for haptic-aware dexterous manipulation.</figcaption></figure>
-</section>
-
 <section id="method">
 <h2>Method</h2>
 <p class="method-lead">HACo maps multi-view images, language, robot state, and haptic histories to executable compliant-action chunks. Compliant intent is predicted only as auxiliary supervision.</p>
