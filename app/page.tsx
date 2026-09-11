@@ -374,7 +374,7 @@ export default function Home() {
   return <>
     <main>
       <section className="hero-cover" id="top">
-        <video autoPlay muted loop playsInline controls preload="metadata" aria-label="HACo demonstration video"><source src="/videos/hero/HACo_ICRA2027_demo_v22_green_continuous.mp4" type="video/mp4"/></video>
+        <video autoPlay muted loop playsInline controls preload="metadata" aria-label="HACo demonstration video"><source src="/videos/hero/HACo_ICRA2027_demo_v26_green_georgia_ood.mp4" type="video/mp4"/></video>
         <a className="scroll-cue" href="#article">Scroll to explore ↓</a>
       </section>
 
