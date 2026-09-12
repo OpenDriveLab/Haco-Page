@@ -8,7 +8,7 @@
   <meta property="og:description" content="HACo learns force-regulating actions from fingertip tactile and joint-torque feedback.">
   <meta property="og:image" content="https://opendrivelab.github.io/Haco/public/og.png">
   <title>Learning Haptic Active Compliance for Force-Aware Dexterous Manipulation</title>
-  <link rel="stylesheet" href="app/globals.css?v=20260910-title-spacing-3">
+  <link rel="stylesheet" href="app/globals.css?v=20260913-benchmark-ood">
 </head>
 <body>
   <main>
@@ -119,7 +119,7 @@
                 <button class="demo-pill" type="button" data-task="paste">Squeeze toothpaste</button>
               </div>
               <div class="demo-view"><video id="benchmark-video" autoplay controls muted loop playsinline preload="metadata" aria-label="Insert poker rollout 2"><source src="public/videos/benchmark/poker/2.mp4" type="video/mp4"></video></div>
-              <div class="demo-caption"><div class="demo-caption__head"><b id="demo-title">Insert poker · multi-contact friction</b><div class="demo-video-pills" id="demo-video-pills" role="tablist" aria-label="Insert poker rollout selection"></div></div><p id="demo-description">Begin with two playing cards lying on the black platform. Use the right hand to pick up one card and transfer it to the left hand. Hold the first card upright and steady with the left hand. Then use the right hand to pick up the remaining card, align it with the card held in the left hand, and slide it into the same grip so that both cards are held together. Finish with both cards securely held in the left hand and the right hand released. Do not bend or drop either card.</p></div>
+              <div class="demo-caption"><div class="demo-caption__head"><b id="demo-title">Insert poker · multi-contact friction</b><div class="demo-video-pills" id="demo-video-pills" role="tablist" aria-label="Insert poker rollout selection"></div></div><div class="demo-ood-detail" id="demo-ood-detail" hidden><span>OOD</span><strong id="demo-ood-text"></strong></div><p id="demo-description">Begin with two playing cards lying on the black platform. Use the right hand to pick up one card and transfer it to the left hand. Hold the first card upright and steady with the left hand. Then use the right hand to pick up the remaining card, align it with the card held in the left hand, and slide it into the same grip so that both cards are held together. Finish with both cards securely held in the left hand and the right hand released. Do not bend or drop either card.</p></div>
             </div>
           </section>
 
@@ -306,26 +306,31 @@
 
   <script>
     const demos = {
-      poker: ['Insert poker · multi-contact friction', 'Begin with two playing cards lying on the black platform. Use the right hand to pick up one card and transfer it to the left hand. Hold the first card upright and steady with the left hand. Then use the right hand to pick up the remaining card, align it with the card held in the left hand, and slide it into the same grip so that both cards are held together. Finish with both cards securely held in the left hand and the right hand released. Do not bend or drop either card.', ['public/videos/benchmark/poker/2.mp4', 'public/videos/benchmark/poker/3.mp4']],
-      book: ['Open book · tangential force', 'Begin with the closed book lying flat on the black platform. Use the left hand to separate and lift a thick section of pages near the middle of the book, then turn the section across the spine to open the book to an interior spread. Bring in the right hand to help guide the pages and press the book open and flat. Finish with both hands holding the selected pages flat for at least five seconds. Do not open only the front or back cover, move the book off the platform, or crease or tear any page.', ['public/videos/benchmark/book/1.mp4', 'public/videos/benchmark/book/2.mp4', 'public/videos/benchmark/book/3.mp4', 'public/videos/benchmark/book/4.mp4']],
-      balloon: ['Draw on balloon · curved fragile contact', 'Begin with the inflated yellow balloon and the black marker on the table. Gently pick up and steady the balloon with the left hand. Use the right hand to pick up the marker and draw a smiley face with two eyes and a curved smile, maintaining light and continuous contact with the balloon. After completing the drawing, set the marker down, lift and orient the balloon so that the finished face is clearly visible to the audience, and present it with the left hand while giving a thumbs-up beside it with the right hand. Do not let the balloon slip, deform excessively, or pop.', ['public/videos/benchmark/balloon/1.mp4', 'public/videos/benchmark/balloon/2.mp4', 'public/videos/benchmark/balloon/3.mp4']],
-      cap: ['Unscrew cap · rotational torque', 'Begin with the bottle standing upright on the white tray. Stabilize the bottle with the left hand while using the right hand to grasp the blue cap and turn it counterclockwise until it is completely detached. At the end, place the bottle upright on the white tray and set the cap down on the table beside the tray, then release both objects and move both hands away. Keep the bottle stable throughout, and do not crush, drop, or spill it.', ['public/videos/benchmark/cap/1.mp4', 'public/videos/benchmark/cap/2.mp4', 'public/videos/benchmark/cap/3.mp4']],
-      paste: ['Squeeze toothpaste · deformable interaction', 'Begin with the purple toothbrush lying horizontally farther from the robot and the uncapped toothpaste tube positioned below it, closer to the robot. Use the right hand to pick up and hold the toothbrush with its bristles facing the toothpaste tube. Use the left hand to pick up the toothpaste tube, position the nozzle above the toothbrush bristles, and gently squeeze a small amount of toothpaste onto the bristles. Then place the toothpaste tube and toothbrush back on the table, release both objects, and move both hands away. Do not drop either object, damage the toothbrush, or dispense toothpaste anywhere except the bristles.', ['public/videos/benchmark/paste/1.mp4', 'public/videos/benchmark/paste/2.mp4', 'public/videos/benchmark/paste/3.mp4']]
+      poker: ['Insert poker · multi-contact friction', 'Begin with two playing cards lying on the black platform. Use the right hand to pick up one card and transfer it to the left hand. Hold the first card upright and steady with the left hand. Then use the right hand to pick up the remaining card, align it with the card held in the left hand, and slide it into the same grip so that both cards are held together. Finish with both cards securely held in the left hand and the right hand released. Do not bend or drop either card.', ['public/videos/benchmark/poker/2.mp4', 'public/videos/benchmark/poker/3.mp4'], [null, 'Long-horizon']],
+      book: ['Open book · tangential force', 'Begin with the closed book lying flat on the black platform. Use the left hand to separate and lift a thick section of pages near the middle of the book, then turn the section across the spine to open the book to an interior spread. Bring in the right hand to help guide the pages and press the book open and flat. Finish with both hands holding the selected pages flat for at least five seconds. Do not open only the front or back cover, move the book off the platform, or crease or tear any page.', ['public/videos/benchmark/book/1.mp4', 'public/videos/benchmark/book/2.mp4', 'public/videos/benchmark/book/3.mp4', 'public/videos/benchmark/book/4.mp4'], [null, 'Unseen paperback book', 'Unseen hardcover book', 'Unseen notebook']],
+      balloon: ['Draw on balloon · curved fragile contact', 'Begin with the inflated yellow balloon and the black marker on the table. Gently pick up and steady the balloon with the left hand. Use the right hand to pick up the marker and draw a smiley face with two eyes and a curved smile, maintaining light and continuous contact with the balloon. After completing the drawing, set the marker down, lift and orient the balloon so that the finished face is clearly visible to the audience, and present it with the left hand while giving a thumbs-up beside it with the right hand. Do not let the balloon slip, deform excessively, or pop.', ['public/videos/benchmark/balloon/1.mp4', 'public/videos/benchmark/balloon/2.mp4', 'public/videos/benchmark/balloon/3.mp4'], [null, 'Unseen beige balloon', 'Unseen purple balloon']],
+      cap: ['Unscrew cap · rotational torque', 'Begin with the bottle standing upright on the white tray. Stabilize the bottle with the left hand while using the right hand to grasp the blue cap and turn it counterclockwise until it is completely detached. At the end, place the bottle upright on the white tray and set the cap down on the table beside the tray, then release both objects and move both hands away. Keep the bottle stable throughout, and do not crush, drop, or spill it.', ['public/videos/benchmark/cap/1.mp4', 'public/videos/benchmark/cap/2.mp4', 'public/videos/benchmark/cap/3.mp4'], [null, 'Unseen red-cap bottle', 'Long-horizon']],
+      paste: ['Squeeze toothpaste · deformable interaction', 'Begin with the purple toothbrush lying horizontally farther from the robot and the uncapped toothpaste tube positioned below it, closer to the robot. Use the right hand to pick up and hold the toothbrush with its bristles facing the toothpaste tube. Use the left hand to pick up the toothpaste tube, position the nozzle above the toothbrush bristles, and gently squeeze a small amount of toothpaste onto the bristles. Then place the toothpaste tube and toothbrush back on the table, release both objects, and move both hands away. Do not drop either object, damage the toothbrush, or dispense toothpaste anywhere except the bristles.', ['public/videos/benchmark/paste/1.mp4', 'public/videos/benchmark/paste/2.mp4', 'public/videos/benchmark/paste/3.mp4'], [null, null, 'Unseen toothpaste']]
     };
     const benchmarkVideo = document.getElementById('benchmark-video');
     const benchmarkVideoSource = benchmarkVideo.querySelector('source');
     const demoVideoPills = document.getElementById('demo-video-pills');
+    const demoOodDetail = document.getElementById('demo-ood-detail');
+    const demoOodText = document.getElementById('demo-ood-text');
+    const rolloutSplit = (task, index) => task === 'paste' ? index < 2 ? 'Standard' : 'OOD' : index === 0 ? 'Standard' : 'OOD';
 
     function selectDemoVideo(task, index) {
-      const [title, , videos] = demos[task];
+      const [title, , videos, ood] = demos[task];
       benchmarkVideoSource.src = videos[index];
-      benchmarkVideo.setAttribute('aria-label', `${title.split(' · ')[0]} rollout ${index + 1}`);
+      benchmarkVideo.setAttribute('aria-label', `${title.split(' · ')[0]} rollout ${index + 1}, ${rolloutSplit(task, index)}`);
       benchmarkVideo.load();
       benchmarkVideo.play().catch(() => {});
       demoVideoPills.querySelectorAll('.demo-video-pill').forEach((item, itemIndex) => {
         item.classList.toggle('active', itemIndex === index);
         item.setAttribute('aria-selected', itemIndex === index ? 'true' : 'false');
       });
+      demoOodDetail.hidden = !ood[index];
+      demoOodText.textContent = ood[index] || '';
     }
 
     function renderDemoVideos(task) {
@@ -333,11 +338,18 @@
       demoVideoPills.replaceChildren();
       demoVideoPills.setAttribute('aria-label', `${title.split(' · ')[0]} rollout selection`);
       videos.forEach((source, index) => {
+        const split = rolloutSplit(task, index);
         const button = document.createElement('button');
         button.className = `demo-video-pill${index === 0 ? ' active' : ''}`;
         button.type = 'button';
-        button.textContent = String(index + 1);
+        button.dataset.split = split.toLowerCase();
+        button.setAttribute('aria-label', `Rollout ${index + 1}, ${split}`);
         button.setAttribute('aria-selected', index === 0 ? 'true' : 'false');
+        const number = document.createElement('span');
+        number.textContent = `#${index + 1}`;
+        const status = document.createElement('small');
+        status.textContent = split;
+        button.append(number, status);
         button.addEventListener('click', () => selectDemoVideo(task, index));
         demoVideoPills.append(button);
       });

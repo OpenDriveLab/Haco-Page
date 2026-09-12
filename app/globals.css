@@ -117,14 +117,23 @@ img, video { display: block; max-width: 100%; }
 .demo-view { overflow: hidden; border-radius: 12px; background: #000; box-shadow: 0 10px 32px rgba(0,0,0,.18); }
 .demo-view video { width: 100%; aspect-ratio: 16/9; object-fit: cover; }
 .demo-caption { margin-top: 15px; padding-left: 15px; border-left: 3px solid var(--accent); }
-.demo-caption__head { display: flex; align-items: center; justify-content: space-between; flex-wrap: nowrap; width: 100%; gap: 18px; margin-bottom: 8px; }
+.demo-caption__head { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; width: 100%; gap: 12px 18px; margin-bottom: 8px; }
 .demo-caption b { display: block; flex: 1 1 auto; min-width: 0; margin: 0; color: var(--ink); font: 600 17px/1.3 var(--font-paper); letter-spacing: -.01em; }
-.demo-video-pills { display: inline-grid; grid-auto-flow: column; grid-auto-columns: 29px; align-items: center; flex: 0 0 auto; gap: 2px; margin-left: auto; padding: 3px; border: 1px solid rgba(54,126,104,.22); border-radius: 999px; background: rgba(74,157,130,.08); box-shadow: inset 0 1px 0 rgba(255,255,255,.7); }
-.demo-video-pill { display: grid; place-items: center; width: 29px; height: 25px; padding: 0; border: 0; border-radius: 999px; color: rgba(26,23,20,.58); background: transparent; font: 600 12px/1 var(--font-paper); font-variant-numeric: tabular-nums; cursor: pointer; transition: color .16s ease, background .16s ease, box-shadow .16s ease, transform .16s ease; }
+.demo-video-pills { display: flex; align-items: center; flex: 0 0 auto; gap: 3px; margin-left: auto; padding: 3px; border: 1px solid rgba(54,126,104,.22); border-radius: 999px; background: rgba(74,157,130,.08); box-shadow: inset 0 1px 0 rgba(255,255,255,.7); }
+.demo-video-pill { display: grid; grid-template-rows: auto auto; place-items: center; min-width: 66px; height: 36px; padding: 4px 9px 3px; border: 0; border-radius: 999px; color: rgba(26,23,20,.64); background: transparent; font: 700 12px/1 var(--font-paper); font-variant-numeric: tabular-nums; cursor: pointer; transition: color .16s ease, background .16s ease, box-shadow .16s ease, transform .16s ease; }
+.demo-video-pill small { color: rgba(26,23,20,.48); font: 700 8px/1 var(--font-sans); letter-spacing: .08em; text-transform: uppercase; }
+.demo-video-pill[data-split='standard'] small { color: var(--title-green); }
+.demo-video-pill[data-split='ood'] small { color: var(--warm); }
 .demo-video-pill:hover { color: var(--title-green); background: rgba(74,157,130,.12); }
 .demo-video-pill:focus-visible { outline: 2px solid rgba(54,126,104,.38); outline-offset: 2px; }
 .demo-video-pill.active { color: #fff; background: var(--title-green); box-shadow: 0 2px 7px rgba(54,126,104,.24); }
+.demo-video-pill.active small { color: rgba(255,255,255,.82); }
 .demo-video-pill:active { transform: translateY(1px); }
+.demo-ood-detail { display: flex; align-items: center; width: fit-content; margin: -1px 0 9px; color: var(--muted); }
+.demo-ood-detail[hidden] { display: none; }
+.demo-ood-detail::before { flex: 0 0 6px; width: 6px; height: 6px; margin-right: 7px; border-radius: 50%; background: var(--warm); content: ''; }
+.demo-ood-detail span { margin-right: 9px; color: var(--warm); font: 700 11px/1 var(--font-sans); letter-spacing: .09em; text-transform: uppercase; }
+.demo-ood-detail strong { padding-left: 9px; border-left: 1px solid rgba(26,23,20,.18); color: var(--muted); font: 500 13px/1.3 var(--font-paper); }
 .demo-caption p { margin: 0; color: var(--muted); font: 15px/1.55 var(--font-paper); }
 .benchmark-taxonomy { display: grid; grid-template-columns: repeat(5,1fr); gap: 8px; margin: 28px 0 0; }
 .benchmark-taxonomy div { padding: 12px 8px; border-top: 3px solid var(--c); color: var(--ink); background: rgba(255,255,255,.55); text-align: center; font: 600 11px/1.35 var(--font-paper); transition: border-color .18s ease, background .18s ease, color .18s ease; }
@@ -264,8 +273,8 @@ img, video { display: block; max-width: 100%; }
   .signal-key { grid-template-columns: 1fr; }
   .demo-caption__head { gap: 10px; }
   .demo-caption b { font-size: 15px; }
-  .demo-video-pills { grid-auto-columns: 26px; padding: 2px; }
-  .demo-video-pill { width: 26px; height: 24px; font-size: 11px; }
+  .demo-video-pills { width: 100%; margin-left: 0; overflow-x: auto; padding: 2px; }
+  .demo-video-pill { min-width: 58px; height: 34px; padding-inline: 7px; font-size: 11px; }
   .horizontal-bar { grid-template-columns: 104px 1fr 30px; gap: 8px; }
   .horizontal-bar__label { font-size: 11px; }
   .failure-grid { grid-template-columns: 1fr; }
