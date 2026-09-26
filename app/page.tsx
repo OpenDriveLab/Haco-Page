@@ -395,7 +395,7 @@ export default function Home() {
         </nav></aside>
 
         <article className="article-shell">
-          <header className="title-block" id="title"><h1>Learning <span className="title-h">H</span>aptic <span className="title-a">A</span>ctive <span className="title-c">C</span><span className="title-o">o</span>mpliance for Force-Aware Dexterous Manipulation</h1><p className="authors">Naisheng Ye, Yinzhe Zhou, Junkai Zhao, Yuhang Lu<br/>Checheng Yu, Zhenjie Yang, Pengwei Wang, and Hongyang Li</p><div className="article-links"><a className="article-link" href="https://opendrivelab.github.io/Haco-Page/">☁ Page</a><a className="article-link disabled" href="#" aria-disabled="true" data-url-placeholder="paper" onClick={(event) => event.preventDefault()}>▤ Paper</a><a className="article-link" href="https://github.com/OpenDriveLab/HACo" target="_blank" rel="noreferrer">⌘ Code</a></div></header>
+          <header className="title-block" id="title"><h1>HACo: Learning <span className="title-h">H</span>aptic <span className="title-a">A</span>ctive <span className="title-c">C</span><span className="title-o">o</span>mpliance for Force-Aware Dexterous Manipulation</h1><p className="authors">Naisheng Ye, Yinzhe Zhou, Junkai Zhao, Yuhang Lu<br/>Checheng Yu, Zhenjie Yang, Pengwei Wang, and Hongyang Li</p><div className="article-links"><a className="article-link" href="https://opendrivelab.github.io/Haco-Page/">☁ Page</a><a className="article-link disabled" href="#" aria-disabled="true" data-url-placeholder="paper" onClick={(event) => event.preventDefault()}>▤ Paper</a><a className="article-link" href="https://github.com/OpenDriveLab/HACo" target="_blank" rel="noreferrer">⌘ Code</a></div></header>
 
           <section id="abstract">
 <h2>Abstract</h2>
