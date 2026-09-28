@@ -258,6 +258,9 @@ img, video { display: block; max-width: 100%; }
 
 .bibtex { white-space: pre-wrap; padding: 22px; overflow: auto; border: 1px solid var(--line); border-radius: 9px; background: rgba(255,255,255,.55); color: #444943; font: 12px/1.6 var(--font-code); }
 .asset-credit { margin-top: 28px !important; color: rgba(26,27,24,.45) !important; font: 10px/1.5 var(--font-paper) !important; }
+.citation-credit { margin-top: 18px !important; color: var(--muted) !important; font-size: 13px !important; }
+.citation-credit a { color: inherit; text-decoration-color: rgba(26,27,24,.28); text-underline-offset: 3px; }
+.citation-credit a:hover { color: var(--ink); text-decoration-color: currentColor; }
 .footer { display: flex; justify-content: space-between; gap: 30px; padding: 28px 32px; border-top: 1px solid var(--line); color: var(--muted); font: 10px/1.4 var(--font-paper); }
 
 @media (max-width: 880px) {
