@@ -13,7 +13,7 @@
 <body>
   <main>
     <section class="hero-cover" id="top">
-      <video autoplay muted loop playsinline controls preload="metadata" aria-label="HACo demonstration video">
+      <video autoplay muted loop playsinline controls preload="metadata" poster="/videos/hero/HACo_ICRA2027_demo_v26_green_georgia_ood.jpg" aria-label="HACo demonstration video">
         <source src="/videos/hero/HACo_ICRA2027_demo_v26_green_georgia_ood.mp4" type="video/mp4">
       </video>
       <a class="scroll-cue" href="#article">Scroll to explore ↓</a>
@@ -118,7 +118,7 @@
                 <button class="demo-pill" type="button" data-task="cap">Unscrew cap</button>
                 <button class="demo-pill" type="button" data-task="paste">Squeeze toothpaste</button>
               </div>
-              <div class="demo-view"><video id="benchmark-video" autoplay controls muted loop playsinline preload="metadata" aria-label="Insert poker rollout 2"><source src="public/videos/benchmark/poker/2.mp4" type="video/mp4"></video></div>
+              <div class="demo-view"><video id="benchmark-video" controls muted loop playsinline preload="none" poster="public/videos/benchmark/poker/2.jpg" aria-label="Insert poker rollout 2"><source data-src="public/videos/benchmark/poker/2.mp4" type="video/mp4"></video></div>
               <div class="demo-caption"><div class="demo-caption__head"><b id="demo-title">Insert poker · multi-contact friction</b><div class="demo-video-pills" id="demo-video-pills" role="tablist" aria-label="Insert poker rollout selection"></div></div><div class="demo-ood-detail" id="demo-ood-detail" hidden><span>OOD</span><strong id="demo-ood-text"></strong></div><p id="demo-description">Begin with two playing cards lying on the black platform. Use the right hand to pick up one card and transfer it to the left hand. Hold the first card upright and steady with the left hand. Then use the right hand to pick up the remaining card, align it with the card held in the left hand, and slide it into the same grip so that both cards are held together. Finish with both cards securely held in the left hand and the right hand released. Do not bend or drop either card.</p></div>
             </div>
           </section>
@@ -280,10 +280,10 @@
             <h2>Failure Cases &amp; Limitations</h2>
             <p>Representative unsuccessful rollouts reveal distinct limitations in contact-rich manipulation.</p>
             <div class="failure-grid">
-              <article class="failure-card"><video controls muted loop playsinline preload="metadata" aria-label="Open Book failure rollout"><source src="/videos/failures/open-book.mp4" type="video/mp4"></video><div class="failure-card__copy"><span class="failure-card__type">Failure F1 · Open Book</span><h3>Insufficient Tangential Separation</h3><p>Because the thumb fails to enter the middle of the page stack, it cannot establish enough tangential traction to separate the target section. The pages therefore move together instead of opening at the intended location.</p></div></article>
-              <article class="failure-card"><video controls muted loop playsinline preload="metadata" aria-label="Draw on Balloon failure rollout"><source src="/videos/failures/draw-on-balloon.mp4" type="video/mp4"></video><div class="failure-card__copy"><span class="failure-card__type">Failure F2 · Draw on Balloon</span><h3>Missed Contact Onset</h3><p>The balloon slips out of the left hand during drawing. This occurs because the right hand does not recognize that the marker has already made contact and continues its motion, creating a disturbance that exceeds the left hand’s stabilizing grip.</p></div></article>
-              <article class="failure-card"><video controls muted loop playsinline preload="metadata" aria-label="Insert Poker Cards failure rollout"><source src="/videos/failures/insert-poker.mp4" type="video/mp4"></video><div class="failure-card__copy"><span class="failure-card__type">Failure F3 · Insert Poker Cards</span><h3>Excessive Pickup Force</h3><p>Due to excessive normal pressure from two right-hand fingers, inter-card friction rises at pickup, causing two cards to be lifted as one stack rather than separating a single layer.</p></div></article>
-              <article class="failure-card"><video controls muted loop playsinline preload="metadata" aria-label="Squeeze Toothpaste failure rollout"><source src="/videos/failures/squeeze-toothpaste.mp4" type="video/mp4"></video><div class="failure-card__copy"><span class="failure-card__type">Failure F4 · Squeeze Toothpaste</span><h3>Nozzle–Brush Misalignment</h3><p>The toothpaste is dispensed beside the bristles instead of onto them. The reason is inaccurate nozzle–brush alignment: the policy produces the squeezing action without tightly coupling visual placement to haptic evidence of extrusion.</p></div></article>
+              <article class="failure-card"><video class="lazy-video" controls muted loop playsinline preload="none" poster="/videos/failures/open-book.jpg" aria-label="Open Book failure rollout"><source data-src="/videos/failures/open-book.mp4" type="video/mp4"></video><div class="failure-card__copy"><span class="failure-card__type">Failure F1 · Open Book</span><h3>Insufficient Tangential Separation</h3><p>Because the thumb fails to enter the middle of the page stack, it cannot establish enough tangential traction to separate the target section. The pages therefore move together instead of opening at the intended location.</p></div></article>
+              <article class="failure-card"><video class="lazy-video" controls muted loop playsinline preload="none" poster="/videos/failures/draw-on-balloon.jpg" aria-label="Draw on Balloon failure rollout"><source data-src="/videos/failures/draw-on-balloon.mp4" type="video/mp4"></video><div class="failure-card__copy"><span class="failure-card__type">Failure F2 · Draw on Balloon</span><h3>Missed Contact Onset</h3><p>The balloon slips out of the left hand during drawing. This occurs because the right hand does not recognize that the marker has already made contact and continues its motion, creating a disturbance that exceeds the left hand’s stabilizing grip.</p></div></article>
+              <article class="failure-card"><video class="lazy-video" controls muted loop playsinline preload="none" poster="/videos/failures/insert-poker.jpg" aria-label="Insert Poker Cards failure rollout"><source data-src="/videos/failures/insert-poker.mp4" type="video/mp4"></video><div class="failure-card__copy"><span class="failure-card__type">Failure F3 · Insert Poker Cards</span><h3>Excessive Pickup Force</h3><p>Due to excessive normal pressure from two right-hand fingers, inter-card friction rises at pickup, causing two cards to be lifted as one stack rather than separating a single layer.</p></div></article>
+              <article class="failure-card"><video class="lazy-video" controls muted loop playsinline preload="none" poster="/videos/failures/squeeze-toothpaste.jpg" aria-label="Squeeze Toothpaste failure rollout"><source data-src="/videos/failures/squeeze-toothpaste.mp4" type="video/mp4"></video><div class="failure-card__copy"><span class="failure-card__type">Failure F4 · Squeeze Toothpaste</span><h3>Nozzle–Brush Misalignment</h3><p>The toothpaste is dispensed beside the bristles instead of onto them. The reason is inaccurate nozzle–brush alignment: the policy produces the squeezing action without tightly coupling visual placement to haptic evidence of extrusion.</p></div></article>
             </div>
           </section>
 
@@ -321,16 +321,52 @@
 
     function selectDemoVideo(task, index) {
       const [title, , videos, ood] = demos[task];
-      benchmarkVideoSource.src = videos[index];
+      benchmarkVideoSource.dataset.src = videos[index];
+      benchmarkVideo.poster = videos[index].replace(/\.mp4$/, '.jpg');
       benchmarkVideo.setAttribute('aria-label', `${title.split(' · ')[0]} rollout ${index + 1}, ${rolloutSplit(task, index)}`);
-      benchmarkVideo.load();
-      benchmarkVideo.play().catch(() => {});
+      if (benchmarkVideo.dataset.inView === 'true') {
+        benchmarkVideoSource.src = videos[index];
+        benchmarkVideo.load();
+        benchmarkVideo.play().catch(() => {});
+      }
       demoVideoPills.querySelectorAll('.demo-video-pill').forEach((item, itemIndex) => {
         item.classList.toggle('active', itemIndex === index);
         item.setAttribute('aria-selected', itemIndex === index ? 'true' : 'false');
       });
       demoOodDetail.hidden = !ood[index];
       demoOodText.textContent = ood[index] || '';
+    }
+
+    function loadBenchmarkVideo() {
+      benchmarkVideo.dataset.inView = 'true';
+      benchmarkVideoSource.src = benchmarkVideoSource.dataset.src;
+      benchmarkVideo.load();
+      benchmarkVideo.play().catch(() => {});
+    }
+
+    if ('IntersectionObserver' in window) {
+      const videoObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          const video = entry.target;
+          if (video === benchmarkVideo) loadBenchmarkVideo();
+          else {
+            const source = video.querySelector('source');
+            source.src = source.dataset.src;
+            video.load();
+          }
+          observer.unobserve(video);
+        });
+      }, { rootMargin: '320px 0px' });
+      videoObserver.observe(benchmarkVideo);
+      document.querySelectorAll('video.lazy-video').forEach((video) => videoObserver.observe(video));
+    } else {
+      loadBenchmarkVideo();
+      document.querySelectorAll('video.lazy-video').forEach((video) => {
+        const source = video.querySelector('source');
+        source.src = source.dataset.src;
+        video.load();
+      });
     }
 
     function renderDemoVideos(task) {

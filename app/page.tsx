@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { useEffect, useState, type CSSProperties } from 'react';
+import { useEffect, useRef, useState, type CSSProperties, type VideoHTMLAttributes } from 'react';
 
 const tasks = ['Insert poker', 'Open book', 'Draw on balloon', 'Unscrew cap', 'Squeeze toothpaste'];
 
@@ -234,6 +234,53 @@ const failures = [
   { type: 'Failure F4 · Squeeze Toothpaste', title: 'Nozzle–Brush Misalignment', video: '/videos/failures/squeeze-toothpaste.mp4', description: 'The toothpaste is dispensed beside the bristles instead of onto them. The reason is inaccurate nozzle–brush alignment: the policy produces the squeezing action without tightly coupling visual placement to haptic evidence of extrusion.' },
 ];
 
+const videoPoster = (src: string) => src.replace(/\.mp4$/, '.jpg');
+
+type LazyVideoProps = Omit<VideoHTMLAttributes<HTMLVideoElement>, 'src' | 'poster' | 'preload'> & {
+  src: string;
+  eager?: boolean;
+};
+
+function LazyVideo({ src, eager = false, autoPlay = false, ...props }: LazyVideoProps) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [shouldLoad, setShouldLoad] = useState(eager);
+
+  useEffect(() => {
+    if (eager || shouldLoad) return;
+    const video = videoRef.current;
+    if (!video || !('IntersectionObserver' in window)) {
+      setShouldLoad(true);
+      return;
+    }
+    const observer = new IntersectionObserver(entries => {
+      if (entries.some(entry => entry.isIntersecting)) {
+        setShouldLoad(true);
+        observer.disconnect();
+      }
+    }, { rootMargin: '320px 0px' });
+    observer.observe(video);
+    return () => observer.disconnect();
+  }, [eager, shouldLoad]);
+
+  useEffect(() => {
+    if (!shouldLoad || !autoPlay) return;
+    const video = videoRef.current;
+    if (!video) return;
+    video.load();
+    video.play().catch(() => {});
+  }, [autoPlay, shouldLoad, src]);
+
+  return <video
+    {...props}
+    ref={videoRef}
+    autoPlay={shouldLoad && autoPlay}
+    poster={videoPoster(src)}
+    preload={shouldLoad && autoPlay ? 'metadata' : 'none'}
+  >
+    {shouldLoad && <source src={src} type="video/mp4"/>}
+  </video>;
+}
+
 function ResultChart({ experiment }: { experiment: typeof experiments[number] }) {
   if (experiment.id === 'main-comparison') {
     return <figure className="result-figure"><div className="result-figure__frame"><div className="result-figure__note"><span>Task success rate by method</span><span>20 evaluation trials per task</span></div><div className="grouped-legend">{groupedTasks.map(task => <span key={task.label}><i style={{ '--c': task.color } as CSSProperties}/>{task.label}</span>)}</div><div className="grouped-chart">{experiment.rows.map(row => <div className={`model-group${row === experiment.ours ? ' is-ours' : ''}`} key={row}><div className="model-bars">{groupedTasks.map(task => {
@@ -375,7 +422,7 @@ export default function Home() {
   return <>
     <main>
       <section className="hero-cover" id="top">
-        <video autoPlay muted loop playsInline controls preload="metadata" aria-label="HACo demonstration video"><source src="/videos/hero/HACo_ICRA2027_demo_v26_green_georgia_ood.mp4" type="video/mp4"/></video>
+        <LazyVideo src="/videos/hero/HACo_ICRA2027_demo_v26_green_georgia_ood.mp4" eager autoPlay muted loop playsInline controls aria-label="HACo demonstration video"/>
         <a className="scroll-cue" href="#article">Scroll to explore ↓</a>
       </section>
 
@@ -444,12 +491,12 @@ export default function Home() {
 
           <section id="benchmark"><h2>Real-World Force Benchmark</h2><p>The benchmark organizes everyday manipulation by the physical role that determines success. This section is also the primary inference-demo gallery: each task will show an autonomous rollout together with its task-specific success definition.</p>
             <div className="benchmark-taxonomy" aria-label="Benchmark force taxonomy"><div className={selectedDemo.id === 'poker' ? 'active' : ''} aria-current={selectedDemo.id === 'poker' ? 'true' : undefined} style={color('var(--task-poker)')}>FRICTION</div><div className={selectedDemo.id === 'book' ? 'active' : ''} aria-current={selectedDemo.id === 'book' ? 'true' : undefined} style={color('var(--task-book)')}>SHEAR</div><div className={selectedDemo.id === 'balloon' ? 'active' : ''} aria-current={selectedDemo.id === 'balloon' ? 'true' : undefined} style={color('var(--task-balloon)')}>CURVATURE</div><div className={selectedDemo.id === 'cap' ? 'active' : ''} aria-current={selectedDemo.id === 'cap' ? 'true' : undefined} style={color('var(--task-cap)')}>TORQUE</div><div className={selectedDemo.id === 'paste' ? 'active' : ''} aria-current={selectedDemo.id === 'paste' ? 'true' : undefined} style={color('var(--task-paste)')}>DEFORMATION</div></div>
-            <div className="demo-gallery"><div className="demo-pills" role="tablist" aria-label="Benchmark tasks">{demos.map(demo => <button className={`demo-pill${demo.id === selectedDemo.id ? ' active' : ''}`} key={demo.id} type="button" onClick={() => { setSelectedDemo(demo); setSelectedVideoIndex(0); }}>{demo.button}</button>)}</div><div className="demo-view"><video key={`${selectedDemo.id}-${selectedVideoIndex}`} autoPlay controls muted loop playsInline preload="metadata" aria-label={`${selectedDemo.button} rollout ${rolloutNumber(selectedVideoIndex)}, ${rolloutSplit(selectedDemo.id, selectedVideoIndex)}`}><source src={selectedDemo.videos[selectedVideoIndex]} type="video/mp4"/></video></div><div className="demo-caption"><div className="demo-caption__head"><b>{selectedDemo.title}</b><div className="demo-video-pills" role="tablist" aria-label={`${selectedDemo.button} rollout selection`}>{selectedDemo.videos.map((video, index) => { const split = rolloutSplit(selectedDemo.id, index); return <button className={`demo-video-pill${index === selectedVideoIndex ? ' active' : ''}`} data-split={split.toLowerCase()} key={video} type="button" aria-label={`Rollout ${rolloutNumber(index)}, ${split}`} aria-selected={index === selectedVideoIndex} onClick={() => setSelectedVideoIndex(index)}><span>#{rolloutNumber(index)}</span><small>{split}</small></button>; })}</div></div>{selectedDemo.ood[selectedVideoIndex] && <div className="demo-ood-detail"><span>OOD</span><strong>{selectedDemo.ood[selectedVideoIndex]}</strong></div>}<p>{selectedDemo.description}</p></div></div>
+            <div className="demo-gallery"><div className="demo-pills" role="tablist" aria-label="Benchmark tasks">{demos.map(demo => <button className={`demo-pill${demo.id === selectedDemo.id ? ' active' : ''}`} key={demo.id} type="button" onClick={() => { setSelectedDemo(demo); setSelectedVideoIndex(0); }}>{demo.button}</button>)}</div><div className="demo-view"><LazyVideo key={`${selectedDemo.id}-${selectedVideoIndex}`} src={selectedDemo.videos[selectedVideoIndex]} autoPlay controls muted loop playsInline aria-label={`${selectedDemo.button} rollout ${rolloutNumber(selectedVideoIndex)}, ${rolloutSplit(selectedDemo.id, selectedVideoIndex)}`}/></div><div className="demo-caption"><div className="demo-caption__head"><b>{selectedDemo.title}</b><div className="demo-video-pills" role="tablist" aria-label={`${selectedDemo.button} rollout selection`}>{selectedDemo.videos.map((video, index) => { const split = rolloutSplit(selectedDemo.id, index); return <button className={`demo-video-pill${index === selectedVideoIndex ? ' active' : ''}`} data-split={split.toLowerCase()} key={video} type="button" aria-label={`Rollout ${rolloutNumber(index)}, ${split}`} aria-selected={index === selectedVideoIndex} onClick={() => setSelectedVideoIndex(index)}><span>#{rolloutNumber(index)}</span><small>{split}</small></button>; })}</div></div>{selectedDemo.ood[selectedVideoIndex] && <div className="demo-ood-detail"><span>OOD</span><strong>{selectedDemo.ood[selectedVideoIndex]}</strong></div>}<p>{selectedDemo.description}</p></div></div>
           </section>
 
           <section id="results"><h2>Experiments</h2>{experiments.map(experiment => <ResultsTable experiment={experiment} key={experiment.id}/>) }</section>
 
-          <section id="failures"><h2>Failure Cases &amp; Limitations</h2><p>Representative unsuccessful rollouts reveal distinct limitations in contact-rich manipulation.</p><div className="failure-grid">{failures.map(failure => <article className="failure-card" key={failure.type}><video controls muted loop playsInline preload="metadata" aria-label={`${failure.title} failure rollout`}><source src={failure.video} type="video/mp4"/></video><div className="failure-card__copy"><span className="failure-card__type">{failure.type}</span><h3>{failure.title}</h3><p>{failure.description}</p></div></article>)}</div></section>
+          <section id="failures"><h2>Failure Cases &amp; Limitations</h2><p>Representative unsuccessful rollouts reveal distinct limitations in contact-rich manipulation.</p><div className="failure-grid">{failures.map(failure => <article className="failure-card" key={failure.type}><LazyVideo src={failure.video} controls muted loop playsInline aria-label={`${failure.title} failure rollout`}/><div className="failure-card__copy"><span className="failure-card__type">{failure.type}</span><h3>{failure.title}</h3><p>{failure.description}</p></div></article>)}</div></section>
 
           <section id="citation"><h2>Citation</h2><p>Citation details will be updated with the public preprint.</p><pre className="bibtex">{`@misc{haco2027,\n  title  = {Learning Haptic Active Compliance for\n            Force-Aware Dexterous Manipulation},\n  author = {Anonymous Authors},\n  year   = {2027}\n}`}</pre></section>
         </article>
