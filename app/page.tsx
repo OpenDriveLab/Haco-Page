@@ -463,7 +463,7 @@ export default function Home() {
 </section>
 <section id="method">
 <h2>Method</h2>
-<p className="method-lead">HACo maps multi-view images, language, robot state, and haptic histories to executable compliant-action chunks. Compliant intent is predicted only as auxiliary supervision.</p>
+<p className="method-lead">HACo learns controller-executable compliant actions from force-regulated demonstrations and conditions action generation on haptic feedback.</p>
 <div className="method-detail" id="architecture">
 <h3>Architecture</h3>
 <p>HACo conditions a flow-based action expert on multi-view images, language, robot state, and haptic histories. Its haptic expert first aligns fingertip wrench and deformation features with joint-torque features from the same finger, then fuses information across fingers into a structured haptic representation. The Compliance Grounding Module lets action features query this representation through gated haptic cross-attention alongside vision-language conditioning. Trained with conditional flow matching, the action expert predicts controller-executable compliant actions with auxiliary compliant-intent supervision.</p>
