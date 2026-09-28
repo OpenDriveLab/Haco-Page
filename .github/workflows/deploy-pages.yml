@@ -31,7 +31,7 @@ jobs:
           cp index.html _site/index.html
           cp app/globals.css _site/app/globals.css
           cp -R public/. _site/
-          sed -i 's|src="/|src="./|g; s|public/videos/|videos/|g; s|https://opendrivelab.github.io/Haco/public/og.png|https://opendrivelab.github.io/Haco-Page/og.png|g' _site/index.html
+          sed -i 's|src="/|src="./|g; s|poster="/|poster="./|g; s|public/videos/|videos/|g; s|https://opendrivelab.github.io/Haco/public/og.png|https://opendrivelab.github.io/Haco-Page/og.png|g' _site/index.html
           sed -i 's|../public/|../|g' _site/app/globals.css
           touch _site/.nojekyll
 
