@@ -499,7 +499,7 @@ export default function Home() {
 
           <section id="failures"><h2>Failure Cases &amp; Limitations</h2><p>Representative unsuccessful rollouts reveal distinct limitations in contact-rich manipulation.</p><div className="failure-grid">{failures.map(failure => <article className="failure-card" key={failure.type}><LazyVideo src={failure.video} controls muted loop playsInline aria-label={`${failure.title} failure rollout`}/><div className="failure-card__copy"><span className="failure-card__type">{failure.type}</span><h3>{failure.title}</h3><p>{failure.description}</p></div></article>)}</div></section>
 
-          <section id="citation"><h2>Citation</h2><p>If you find our work helpful, please cite it using the BibTeX entry below.</p><pre className="bibtex">{`@misc{haco2027,\n  title  = {Learning Haptic Active Compliance for\n            Force-Aware Dexterous Manipulation},\n  author = {Ye, Naisheng and Zhou, Yinzhe and Zhao, Junkai and\n            Lu, Yuhang and Yu, Checheng and Yang, Zhenjie and\n            Wang, Pengwei and Li, Hongyang},\n  year   = {2027}\n}`}</pre></section>
+          <section id="citation"><h2>Citation</h2><p>If you find our work helpful, please cite it using the BibTeX entry below.</p><pre className="bibtex">{`@misc{haco2027,\n  title  = {Learning Haptic Active Compliance for Force-Aware Dexterous Manipulation},\n  author = {Ye, Naisheng and Zhou, Yinzhe and Zhao, Junkai and Lu, Yuhang and Yu, Checheng and Yang, Zhenjie and Wang, Pengwei and Li, Hongyang},\n  year   = {2027}\n}`}</pre></section>
         </article>
       </div></section>
     </main>

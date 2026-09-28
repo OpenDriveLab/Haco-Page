@@ -4,6 +4,10 @@ import './globals.css';
 export const metadata: Metadata = {
   title: 'HACo: Learning Haptic Active Compliance for Force-Aware Dexterous Manipulation',
   description: 'HACo learns force-regulating actions from fingertip tactile and joint-torque feedback for contact-rich dexterous manipulation.',
+  icons: {
+    icon: [{ url: '/favicon.svg', type: 'image/svg+xml' }],
+    shortcut: '/favicon.svg',
+  },
   openGraph: {
     title: 'HACo: Learning Haptic Active Compliance for Force-Aware Dexterous Manipulation',
     description: 'HACo learns force-regulating actions from fingertip tactile and joint-torque feedback.',
