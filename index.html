@@ -51,7 +51,9 @@
         <article class="article-shell">
           <header class="title-block" id="title">
             <h1><span class="title-h">H</span><span class="title-a">A</span><span class="title-c">C</span><span class="title-o">o</span>: Learning <span class="title-h">H</span>aptic <span class="title-a">A</span>ctive <span class="title-c">C</span><span class="title-o">o</span>mpliance for Force-Aware Dexterous Manipulation</h1>
-            <p class="authors">Naisheng Ye, Yinzhe Zhou, Junkai Zhao, Yuhang Lu<br>Checheng Yu, Zhenjie Yang, Pengwei Wang, and Hongyang Li</p>
+            <p class="authors">Naisheng Ye<sup>1,2,†</sup>, Yinzhe Zhou<sup>2,3</sup>, Junkai Zhao<sup>2</sup>, Yuhang Lu<sup>1,2</sup><br>Checheng Yu<sup>1</sup>, Zhenjie Yang<sup>1</sup>, Pengwei Wang<sup>2</sup>, and Hongyang Li<sup>1</sup></p>
+            <p class="affiliation"><sup>1</sup>The University of Hong Kong<br><sup>2</sup>Beijing Academy of Artificial Intelligence (BAAI)<br><sup>3</sup>Johns Hopkins University</p>
+            <p class="affiliation affiliation-note"><sup>†</sup>Work done during an internship at BAAI.</p>
             <div class="article-links">
               <a class="article-link" href="https://opendrivelab.github.io/Haco-Page/">☁ Page</a>
               <a class="article-link disabled" href="#" aria-disabled="true" data-url-placeholder="paper" onclick="return false">▤ Paper</a>
@@ -59,20 +61,20 @@
             </div>
           </header>
 
-          <section id="abstract">
+<section id="abstract">
 <h2>Abstract</h2>
 <div class="abstract-language" lang="en">
-<p>Contact-rich dexterous manipulation requires robots to generate precise motions while actively regulating forces across evolving multi-contact interactions. Haptic observations reveal contact, but learning to act on them also requires supervision that captures the controller reference needed to sustain or adjust that contact. Nominal teleoperation commands can encode excessive loading, whereas observed configurations omit motion constrained by the object.</p>
-<p>We introduce <strong>HACo</strong>, a <strong>Haptic Active Compliance</strong> policy that learns force-regulating actions directly from haptic feedback. Compliance-regulated teleoperation converts operator commands into controller-executable compliant actions that preserve motion intent while regulating interaction loads. HACo learns these compliant actions directly, with their command–state discrepancy providing auxiliary compliant-intent supervision. It integrates fingertip tactile and joint-torque feedback as complementary observations of local contact and load transmission through the articulated hand. A <strong>Compliance Grounding Module</strong> grounds action generation in the evolving haptic state through gated compliance attention, enabling closed-loop force regulation without explicit online contact modeling.</p>
-<p>We evaluate HACo on a real-world benchmark spanning multi-contact friction, tangential interaction, fragile curved-surface contact, rotational torque, and deformable-object manipulation. Across 20 trials per task, HACo achieves an 83% mean progress score versus 35% for the strongest evaluated baseline. HACo variants without compliant-intent supervision and with nominal action targets achieve 73% and 59%, respectively. These results motivate learning both executable references and their contact-dependent command–state relationship.</p>
+<p>Contact-rich dexterous manipulation requires policies to translate physical feedback into motion commands that regulate interaction loads across evolving multi-contact interactions. This requires both haptic observations that capture the contact state and action supervision that demonstrates how motion commands should adapt to it. Existing policies often overlook the complementary roles of fingertip tactile sensing and joint torque. Meanwhile, commonly used action targets include nominal teleoperation commands, which can encode excessive loading, and observed configurations, which omit motion constrained by the object.</p>
+<p>We introduce <strong>HACo</strong>, a <strong>Haptic Active Compliance</strong> policy that learns force-regulating actions directly from haptic feedback. Compliance-regulated teleoperation converts operator commands into controller-executable compliant actions that preserve motion intent while regulating interaction loads. HACo learns these compliant actions directly, with their command-state discrepancy providing auxiliary compliant-intent supervision. HACo further combines local contact responses from fingertip tactile sensing with load transmission through the articulated hand captured by joint-torque feedback, including contacts beyond tactile coverage. A Compliance Grounding Module grounds action generation in the evolving haptic state through gated haptic cross-attention, enabling closed-loop force regulation without explicit online contact modeling.</p>
+<p>We evaluate HACo on a real-world benchmark spanning multi-contact friction, tangential interaction, fragile curved-surface contact, rotational torque, and deformable-object manipulation. Across 20 trials per task, HACo achieves an 83% mean success rate versus 35% for the strongest evaluated baseline. These results demonstrate HACo's ability to translate complementary haptic feedback into active compliance across diverse force-sensitive dexterous manipulation tasks.</p>
 </div>
 </section>
 <section id="contributions">
 <h2>Contributions</h2>
 <ul>
-<li><strong>Complementary haptic perception.</strong> We couple fingertip tactile sensing with joint-torque feedback to represent both local contact and loads transmitted through the articulated hand.</li>
-<li><strong>Active compliance learning.</strong> We learn from force-regulated demonstrations by combining controller-executable compliant actions, compliant-intent supervision, and haptic-grounded action generation.</li>
-<li><strong>A real-world dexterous force benchmark.</strong> We evaluate force regulation across multi-contact friction, tangential interaction, fragile curved-surface contact, rotational torque, and deformable-object manipulation.</li>
+<li><strong>We develop complementary haptic perception</strong> that couples fingertip tactile sensing with joint-torque feedback to represent both local contact and loads transmitted through the articulated hand.</li>
+<li><strong>We formulate active compliance learning</strong> from regulated demonstrations, combining controller-executable compliant actions, compliant-intent supervision, and the Compliance Grounding Module for haptic-conditioned action generation.</li>
+<li><strong>We introduce a real-world dexterous force benchmark</strong> spanning multi-contact friction, tangential interaction, fragile curved-surface contact, rotational torque, and deformable-object manipulation.</li>
 </ul>
 </section>
 <section id="method">
@@ -80,33 +82,33 @@
 <p class="method-lead">HACo maps multi-view images, language, robot state, and haptic histories to executable compliant-action chunks. Compliant intent is predicted only as auxiliary supervision.</p>
 <div class="method-detail" id="architecture">
 <h3>Architecture</h3>
-<p>Multi-view images, language, and robot state condition a flow-based action expert. For each finger, HACo fuses fingertip wrench and deformation features with torque signals from the same kinematic chain, then models interactions across digits as structured haptic memory. The Compliance Grounding Module lets action features query this memory through gated cross-attention. The model predicts executable compliant actions together with auxiliary compliant intent; only the compliant actions are sent to the robot.</p>
+<p>HACo conditions a flow-based action expert on multi-view images, language, robot state, and haptic histories. Its haptic expert first aligns fingertip wrench and deformation features with joint-torque features from the same finger, then fuses information across fingers into a structured haptic representation. The Compliance Grounding Module lets action features query this representation through gated haptic cross-attention alongside vision-language conditioning. Trained with conditional flow matching, the action expert predicts controller-executable compliant actions with auxiliary compliant-intent supervision.</p>
 </div>
 <figure class="paper-figure">
-<div class="architecture-frame"><img src="/method/haco-architecture.png?v=20260910-fig02" width="2780" height="1036" alt="HACo model architecture: structured haptic perception and gated compliance attention condition a flow-based action expert"></div>
-<figcaption>HACo architecture with haptic-grounded action generation.</figcaption>
+<div class="architecture-frame"><img src="/method/haco-architecture.png?v=20260928-website-fig01" width="3091" height="1174" loading="lazy" alt="Overview of HACo with kinematics-aligned haptic perception and gated compliance grounding"></div>
+<figcaption><strong>Figure 1.</strong> Overview of HACo with kinematics-aligned haptic perception and gated compliance grounding.</figcaption>
 </figure>
 <div class="method-detail" id="force-regulated-demonstrations">
 <h3>Force-regulated demonstrations</h3>
 <p>Motion retargeting provides nominal arm and hand references. Cartesian admittance and fingertip force regulation adjust them before execution, preserving task motion while limiting excessive loads. The resulting compliant references are recorded with synchronized visual, state, tactile, and torque observations.</p>
 </div>
-<figure class="paper-figure">
+<figure class="paper-figure paper-figure--compact">
 <div class="architecture-frame"><img src="/method/compliant-teleoperation.png" width="2400" height="2084" loading="lazy" alt="Compliance-regulated teleoperation: retargeting, arm admittance, hand force regulation, and synchronized recording"></div>
-<figcaption>Compliance-regulated teleoperation for force-aware demonstrations.</figcaption>
+<figcaption><strong>Figure 2.</strong> Compliance-regulated teleoperation for force-aware demonstrations.</figcaption>
 </figure>
 <div class="method-detail" id="compliant-action-learning">
 <h3>Compliant action learning</h3>
-<p>Observed motion omits commands blocked by contact, while nominal commands can apply excessive force. HACo instead learns the regulated compliant command. Its discrepancy from the observed hand state, <strong>Δq<sup>ci</sup><sub>t</sub> = q<sup>cmp</sup><sub>t</sub> − q<sup>obs</sup><sub>t</sub></strong>, supplies compliant-intent supervision during conditional flow matching and is never added to the executed action.</p>
+<p>Observed motion omits commands blocked by contact, while nominal commands can apply excessive force. HACo instead learns the regulated compliant command. Its discrepancy from the observed hand state, <strong>Δq<sup>ci</sup><sub>t</sub> = q<sup>cmp</sup><sub>t</sub> − q<sup>obs</sup><sub>t</sub></strong>, supplies compliant-intent supervision during conditional flow matching.</p>
 </div>
-<figure class="paper-figure">
+<figure class="paper-figure paper-figure--compact">
 <div class="architecture-frame"><img src="/method/compliant-intent.png" width="2400" height="1644" loading="lazy" alt="Nominal, observed, and compliant hand configurations under contact, illustrating compliant intent and the correction to the nominal command"></div>
-<figcaption>Nominal, observed, and compliant hand configurations under contact.</figcaption>
+<figcaption><strong>Figure 3.</strong> Hand action semantics under contact: nominal, observed, and compliant configurations.</figcaption>
 </figure>
           </section>
 
           <section id="benchmark">
             <h2>Real-World Force Benchmark</h2>
-            <p>The benchmark organizes everyday manipulation by the physical role that determines success. This section is also the primary inference-demo gallery: each task will show an autonomous rollout together with its task-specific success definition.</p>
+            <p>Most prior work evaluates dexterous manipulation primarily through motion outcomes rather than force regulation. Our benchmark therefore comprises five multi-stage bimanual tasks spanning multi-contact friction, precise tangential-force control, fragile curved-surface contact, rotational torque, and deformable-object compression. While each task emphasizes a distinct interaction regime, all require the policy to complete the intended motion while regulating the physical interaction that makes completion possible.</p>
             <div class="benchmark-taxonomy" aria-label="Benchmark force taxonomy">
               <div class="active" data-task="poker" aria-current="true" style="--c:var(--task-poker)">FRICTION</div><div data-task="book" style="--c:var(--task-book)">SHEAR</div><div data-task="balloon" style="--c:var(--task-balloon)">CURVATURE</div><div data-task="cap" style="--c:var(--task-cap)">TORQUE</div><div data-task="paste" style="--c:var(--task-paste)">DEFORMATION</div>
             </div>
@@ -125,9 +127,10 @@
 
           <section id="results">
             <h2>Experiments</h2>
+            <p class="results-overview">We evaluate whether HACo improves force-sensitive dexterous manipulation over visuomotor and tactile-augmented policies, then isolate the contributions of haptic perception, compliant-action learning, compliance grounding, and wrist-mounted visual observations. Every entry reports successful physical rollouts out of 20; Mean is the macro-average across the five tasks.</p>
 
             <div class="experiment-group" id="main-comparison">
-              <h3>Main comparison</h3><p>Five representative dexterous-manipulation approaches evaluated under a shared task protocol.</p>
+              <h3>Main comparison</h3><p>Compare HACo with visuomotor and tactile-augmented policies under the same five-task, 20-rollout evaluation protocol.</p>
               <figure class="result-figure">
                 <div class="result-figure__frame">
                   <div class="result-figure__note"><span>Task success rate by method</span><span>20 evaluation trials per task</span></div>
@@ -140,7 +143,7 @@
                     <div class="model-group is-ours"><div class="model-bars"><i class="task-bar" tabindex="0" role="img" data-value="90%" data-tooltip="Insert poker · 90%" aria-label="Insert poker: 18/20, 90%" style="--h:90%;--c:var(--task-poker)"></i><i class="task-bar" tabindex="0" role="img" data-value="85%" data-tooltip="Open book · 85%" aria-label="Open book: 17/20, 85%" style="--h:85%;--c:var(--task-book)"></i><i class="task-bar" tabindex="0" role="img" data-value="70%" data-tooltip="Draw on balloon · 70%" aria-label="Draw on balloon: 14/20, 70%" style="--h:70%;--c:var(--task-balloon)"></i><i class="task-bar" tabindex="0" role="img" data-value="95%" data-tooltip="Unscrew cap · 95%" aria-label="Unscrew cap: 19/20, 95%" style="--h:95%;--c:var(--task-cap)"></i><i class="task-bar" tabindex="0" role="img" data-value="75%" data-tooltip="Squeeze toothpaste · 75%" aria-label="Squeeze toothpaste: 15/20, 75%" style="--h:75%;--c:var(--task-paste)"></i></div><span class="model-label">HACo</span></div>
                   </div>
                 </div>
-                <figcaption>Figure 2. Main comparison across five force-sensitive tasks.</figcaption>
+                <figcaption>Table 1a. Task-wise success-rate summary across the five force-sensitive tasks.</figcaption>
               </figure>
               <!-- Radar chart temporarily hidden
               <figure class="result-figure radar-figure">
@@ -197,11 +200,12 @@
                   <tr><th>T-Rex</th><td>4/20</td><td>6/20</td><td>2/20</td><td>12/20</td><td>11/20</td><td>35%</td></tr>
                   <tr class="ours"><th>HACo</th><td>18/20</td><td>17/20</td><td>14/20</td><td>19/20</td><td>15/20</td><td>83%</td></tr>
                 </tbody>
-              </table></div><p class="table-caption">Table 1. Main comparison across the five real-world force-sensitive tasks.</p>
+              </table></div><p class="table-caption">Table 1b. Numerical policy comparison on the real-world force-sensitive dexterous manipulation benchmark.</p>
+              <div class="experiment-analysis"><span>Insight</span><p>HACo achieves an 83% mean success rate and leads on all five tasks, exceeding T-Rex by 48 percentage points and GR00T by 68. It also reduces mean fingertip force by 19% relative to GR00T, showing that the higher task success is accompanied by more compliant interaction. The modest gain from GR00T to GR00T + Tactile (15% to 22%) further indicates that simple tactile concatenation is not enough; this favors connecting haptic feedback to the evolving action representation.</p></div>
             </div>
 
             <div class="experiment-group" id="perception">
-              <h3>Haptic Perception Ablation</h3><p>Isolate the contributions of fingertip tactile and joint-torque feedback and compare factorized and coupled haptic representations.</p>
+              <h3>Haptic perception ablation</h3><p>Isolate the contributions of fingertip tactile and joint-torque feedback and compare factorized and coupled haptic representations.</p>
               <figure class="result-figure">
                 <div class="result-figure__frame"><div class="result-figure__note"><span>Macro mean by perception configuration</span><span>Complete five-task results</span></div><div class="horizontal-bars">
                   <div class="horizontal-bar"><span class="horizontal-bar__label">w/o Haptic Feedback</span><div class="horizontal-bar__track"><i class="horizontal-bar__fill" style="--value:27%"></i></div><span class="horizontal-bar__value">27%</span></div>
@@ -209,7 +213,7 @@
                   <div class="horizontal-bar"><span class="horizontal-bar__label">w/o Torque Feedback</span><div class="horizontal-bar__track"><i class="horizontal-bar__fill" style="--value:68%"></i></div><span class="horizontal-bar__value">68%</span></div>
                   <div class="horizontal-bar"><span class="horizontal-bar__label">w/o Coupled Encoding</span><div class="horizontal-bar__track"><i class="horizontal-bar__fill" style="--value:70%"></i></div><span class="horizontal-bar__value">70%</span></div>
                   <div class="horizontal-bar is-ours"><span class="horizontal-bar__label">HACo</span><div class="horizontal-bar__track"><i class="horizontal-bar__fill" style="--value:83%"></i></div><span class="horizontal-bar__value">83%</span></div>
-                </div></div><figcaption>Figure 3. Haptic perception ablation.</figcaption>
+                </div></div><figcaption>Table 2a. Mean success-rate summary by haptic-perception configuration.</figcaption>
               </figure>
               <div class="table-wrap"><table class="result-table">
                 <thead><tr><th>Haptic perception</th><th>Insert poker</th><th>Open book</th><th>Draw on balloon</th><th>Unscrew cap</th><th>Squeeze toothpaste</th><th>Mean</th></tr></thead>
@@ -220,16 +224,17 @@
                   <tr><th>w/o Coupled Encoding</th><td>17/20</td><td>14/20</td><td>12/20</td><td>13/20</td><td>14/20</td><td>70%</td></tr>
                   <tr class="ours"><th>HACo</th><td>18/20</td><td>17/20</td><td>14/20</td><td>19/20</td><td>15/20</td><td>83%</td></tr>
                 </tbody>
-              </table></div><p class="table-caption">Table 2. Haptic perception ablation across sensing modalities and representation strategies.</p>
+              </table></div><p class="table-caption">Table 2b. Numerical results for the haptic-perception ablation.</p>
+              <div class="experiment-analysis"><span>Insight</span><p>Removing all haptic feedback drops the mean success rate from 83% to 27%, confirming that physical observations are essential. Tactile feedback alone reaches 68%, compared with 45% for joint torque alone, so local contact is the dominant cue. Joint torque remains complementary: adding it improves every task and raises cap removal from 70% to 95%. Coupled encoding provides a further gain from 70% to 83%, supporting kinematics-aligned fusion across the hand.</p></div>
             </div>
 
             <div class="experiment-group" id="compliance">
-              <h3>Compliance Learning Ablation</h3><p>Starting from nominal teleoperation targets, progressively introduce compliant actions generated by the compliance controller and auxiliary compliance-intent supervision.</p>
+              <h3>Compliance learning ablation</h3><p>Progressively introduce controller-executable compliant actions and auxiliary compliant-intent supervision from regulated demonstrations.</p>
               <figure class="result-figure"><div class="result-figure__frame"><div class="result-figure__note"><span>Macro mean by compliant-action learning stage</span><span>Complete five-task results</span></div><div class="horizontal-bars">
                 <div class="horizontal-bar"><span class="horizontal-bar__label">Nominal Action</span><div class="horizontal-bar__track"><i class="horizontal-bar__fill" style="--value:59%"></i></div><span class="horizontal-bar__value">59%</span></div>
                 <div class="horizontal-bar"><span class="horizontal-bar__label">Compliant Action</span><div class="horizontal-bar__track"><i class="horizontal-bar__fill" style="--value:73%"></i></div><span class="horizontal-bar__value">73%</span></div>
                 <div class="horizontal-bar is-ours"><span class="horizontal-bar__label">+ Compliance-Intent Supervision</span><div class="horizontal-bar__track"><i class="horizontal-bar__fill" style="--value:83%"></i></div><span class="horizontal-bar__value">83%</span></div>
-              </div></div><figcaption>Figure 4. Compliant-action learning ablation.</figcaption></figure>
+              </div></div><figcaption>Table 3a. Mean success-rate summary by compliant-action learning stage.</figcaption></figure>
               <div class="table-wrap"><table class="result-table result-table--components">
                 <thead><tr><th>Configuration</th><th class="component-head">Compliant Action</th><th class="component-head component-head--cis">CIS</th><th>Insert poker</th><th>Open book</th><th>Draw on balloon</th><th>Unscrew cap</th><th>Squeeze toothpaste</th><th>Mean</th></tr></thead>
                 <tbody>
@@ -237,17 +242,18 @@
                   <tr><th>Compliant Action</th><td class="component-cell is-enabled">✓</td><td class="component-cell component-cell--cis">—</td><td>15/20</td><td>15/20</td><td>13/20</td><td>16/20</td><td>14/20</td><td>73%</td></tr>
                   <tr class="ours"><th>+ Compliance-Intent Supervision</th><td class="component-cell is-enabled">✓</td><td class="component-cell component-cell--cis is-enabled">✓</td><td>18/20</td><td>17/20</td><td>14/20</td><td>19/20</td><td>15/20</td><td>83%</td></tr>
                 </tbody>
-              </table></div><p class="table-caption">Table 3. Progressive composition of compliant-action learning and compliance-intent supervision.</p>
+              </table></div><p class="table-caption">Table 3b. Numerical results for the compliance-learning ablation.</p>
+              <div class="experiment-analysis"><span>Insight</span><p>Keeping the compliant action target but removing compliant-intent supervision lowers the mean from 83% to 73%. Replacing that target with the nominal teleoperation command lowers it further to 59%. The larger loss from changing the action target shows that the controller-executable, force-regulated reference is the primary contribution, while compliant-intent supervision adds a complementary benefit by preserving the force-regulating command-state discrepancy.</p></div>
             </div>
 
             <div class="experiment-group" id="integration">
-              <h3>Compliance Grounding Ablation</h3><p>Hold haptic observations and active compliance actions fixed while varying how the haptic state conditions action generation.</p>
+              <h3>Compliance grounding ablation</h3><p>Hold haptic observations and compliant action targets fixed while varying how haptic state conditions action generation.</p>
               <figure class="result-figure"><div class="result-figure__frame"><div class="result-figure__note"><span>Macro mean by compliance grounding mechanism</span><span>Complete five-task results</span></div><div class="horizontal-bars">
                 <div class="horizontal-bar"><span class="horizontal-bar__label">Visuo–Haptic Fusion</span><div class="horizontal-bar__track"><i class="horizontal-bar__fill" style="--value:41%"></i></div><span class="horizontal-bar__value">41%</span></div>
                 <div class="horizontal-bar"><span class="horizontal-bar__label">Action-Suffix Fusion</span><div class="horizontal-bar__track"><i class="horizontal-bar__fill" style="--value:47%"></i></div><span class="horizontal-bar__value">47%</span></div>
                 <div class="horizontal-bar"><span class="horizontal-bar__label">Compliance Attention</span><div class="horizontal-bar__track"><i class="horizontal-bar__fill" style="--value:66%"></i></div><span class="horizontal-bar__value">66%</span></div>
                 <div class="horizontal-bar is-ours"><span class="horizontal-bar__label">Gated Compliance Attention</span><div class="horizontal-bar__track"><i class="horizontal-bar__fill" style="--value:83%"></i></div><span class="horizontal-bar__value">83%</span></div>
-              </div></div><figcaption>Figure 5. Compliance grounding ablation.</figcaption></figure>
+              </div></div><figcaption>Table 4a. Mean success-rate summary by compliance-grounding mechanism.</figcaption></figure>
               <div class="table-wrap"><table class="result-table">
                 <thead><tr><th>Compliance grounding</th><th>Insert poker</th><th>Open book</th><th>Draw on balloon</th><th>Unscrew cap</th><th>Squeeze toothpaste</th><th>Mean</th></tr></thead>
                 <tbody>
@@ -256,22 +262,24 @@
                   <tr><th>Compliance Attention</th><td>14/20</td><td>15/20</td><td>11/20</td><td>16/20</td><td>10/20</td><td>66%</td></tr>
                   <tr class="ours"><th>Gated Compliance Attention</th><td>18/20</td><td>17/20</td><td>14/20</td><td>19/20</td><td>15/20</td><td>83%</td></tr>
                 </tbody>
-              </table></div><p class="table-caption">Table 4. Compliance grounding ablation across haptic-state conditioning mechanisms.</p>
+              </table></div><p class="table-caption">Table 4b. Numerical results for the compliance-grounding ablation.</p>
+              <div class="experiment-analysis"><span>Insight</span><p>Direct Visuo-Haptic Fusion and Action-Suffix Fusion reach only 41% and 47%, while dedicated haptic cross-attention reaches 66% and the complete gated CGM reaches 83%. Cross-attention gives the evolving action representation explicit access to contact evidence without disrupting the pretrained visual or action streams. The zero-initialized gate adds another 17 points by preserving pretrained computation at the start of adaptation and regulating reliance on noisy or intermittent haptic signals.</p></div>
             </div>
 
             <div class="experiment-group" id="wrist-camera">
-              <h3>Wrist-Camera Ablation</h3><p>A compact observation study that isolates the contribution of wrist-mounted visual coverage while keeping haptic sensing and the HACo policy fixed.</p>
+              <h3>Wrist-camera ablation</h3><p>Remove both wrist cameras while keeping the haptic observations and HACo policy otherwise unchanged.</p>
               <figure class="result-figure"><div class="result-figure__frame"><div class="result-figure__note"><span>Macro mean with and without wrist cameras</span><span>Complete five-task results</span></div><div class="horizontal-bars">
                 <div class="horizontal-bar"><span class="horizontal-bar__label">w/o Wrist Cameras</span><div class="horizontal-bar__track"><i class="horizontal-bar__fill" style="--value:76%"></i></div><span class="horizontal-bar__value">76%</span></div>
                 <div class="horizontal-bar is-ours"><span class="horizontal-bar__label">w/ Wrist Cameras</span><div class="horizontal-bar__track"><i class="horizontal-bar__fill" style="--value:83%"></i></div><span class="horizontal-bar__value">83%</span></div>
-              </div></div><figcaption>Figure 6. Wrist-camera ablation.</figcaption></figure>
+              </div></div><figcaption>Table 5a. Mean success-rate summary with and without wrist cameras.</figcaption></figure>
               <div class="table-wrap"><table class="result-table">
                 <thead><tr><th>Camera observation</th><th>Insert poker</th><th>Open book</th><th>Draw on balloon</th><th>Unscrew cap</th><th>Squeeze toothpaste</th><th>Mean</th></tr></thead>
                 <tbody>
                   <tr><th>w/o Wrist Cameras</th><td>13/20</td><td>15/20</td><td>14/20</td><td>18/20</td><td>16/20</td><td>76%</td></tr>
                   <tr class="ours"><th>w/ Wrist Cameras</th><td>18/20</td><td>17/20</td><td>14/20</td><td>19/20</td><td>15/20</td><td>83%</td></tr>
                 </tbody>
-              </table></div><p class="table-caption">Table 5. Wrist-camera observation ablation.</p>
+              </table></div><p class="table-caption">Table 5b. Numerical results for the wrist-camera ablation.</p>
+              <div class="experiment-analysis"><span>Insight</span><p>Removing both wrist cameras reduces the mean success rate by only 7 points, from 83% to 76%. This modest drop suggests that haptic feedback recovers contact state that is difficult to observe under visual occlusion. Wrist views remain useful, but the result indicates that sensing anchored at the interaction interface provides a more direct and robust contact representation.</p></div>
             </div>
 
           </section>
@@ -289,11 +297,13 @@
 
           <section id="citation">
             <h2>Citation</h2>
-            <p>Citation details will be updated with the public preprint.</p>
+            <p>If you find our work helpful, please cite it using the BibTeX entry below.</p>
             <pre class="bibtex">@misc{haco2027,
   title  = {Learning Haptic Active Compliance for
             Force-Aware Dexterous Manipulation},
-  author = {Anonymous Authors},
+  author = {Ye, Naisheng and Zhou, Yinzhe and Zhao, Junkai and
+            Lu, Yuhang and Yu, Checheng and Yang, Zhenjie and
+            Wang, Pengwei and Li, Hongyang},
   year   = {2027}
 }</pre>
           </section>
