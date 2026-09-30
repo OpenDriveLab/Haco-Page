@@ -501,7 +501,15 @@ export default function Home() {
 
           <section id="failures"><h2>Failure Cases &amp; Limitations</h2><p>Representative unsuccessful rollouts reveal distinct limitations in contact-rich manipulation.</p><div className="failure-grid">{failures.map(failure => <article className="failure-card" key={failure.type}><LazyVideo src={failure.video} controls muted loop playsInline aria-label={`${failure.title} failure rollout`}/><div className="failure-card__copy"><span className="failure-card__type">{failure.type}</span><h3>{failure.title}</h3><p>{failure.description}</p></div></article>)}</div></section>
 
-          <section id="citation"><h2>Citation</h2><p>If you find our work helpful, please cite it below.</p><pre className="bibtex">{`@misc{haco2027,\n  title  = {Learning Haptic Active Compliance for Force-Aware Dexterous Manipulation},\n  author = {Ye, Naisheng and Zhou, Yinzhe and Zhao, Junkai and Lu, Yuhang and Yu, Checheng and Yang, Zhenjie and Wang, Pengwei and Li, Hongyang},\n  year   = {2027}\n}`}</pre><p className="citation-credit">This website draws inspiration from the open-source <a href="https://github.com/enpire-research/enpire-research.github.io" target="_blank" rel="noreferrer">ENPIRE project-page template</a> and the <a href="https://tactile-reactive-dexterous.github.io/" target="_blank" rel="noreferrer">T-Rex project page</a>. We thank both teams for sharing their work.</p></section>
+          <section id="citation"><h2>Citation</h2><p>If you find our work helpful, please cite it below.</p><pre className="bibtex">{`@misc{ye2026hacolearninghapticactive,
+  title         = {HACo: Learning Haptic Active Compliance for Force-Aware Dexterous Manipulation},
+  author        = {Naisheng Ye and Yinzhe Zhou and Junkai Zhao and Yuhang Lu and Checheng Yu and Zhenjie Yang and Pengwei Wang and Hongyang Li},
+  year          = {2026},
+  eprint        = {2609.36596},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.RO},
+  url           = {https://arxiv.org/abs/2609.36596}
+}`}</pre><p className="citation-credit">This website draws inspiration from the open-source <a href="https://github.com/enpire-research/enpire-research.github.io" target="_blank" rel="noreferrer">ENPIRE project-page template</a> and the <a href="https://tactile-reactive-dexterous.github.io/" target="_blank" rel="noreferrer">T-Rex project page</a>. We thank both teams for sharing their work.</p></section>
         </article>
       </div></section>
     </main>
