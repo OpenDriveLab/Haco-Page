@@ -444,7 +444,7 @@ export default function Home() {
             <p className="authors">Naisheng Ye<sup>1,2,†</sup>, Yinzhe Zhou<sup>2,3</sup>, Junkai Zhao<sup>2</sup>, Yuhang Lu<sup>1,2</sup><br/>Checheng Yu<sup>1</sup>, Zhenjie Yang<sup>1</sup>, Pengwei Wang<sup>2</sup>, and Hongyang Li<sup>1</sup></p>
             <p className="affiliation"><sup>1</sup>The University of Hong Kong<br/><sup>2</sup>Beijing Academy of Artificial Intelligence (BAAI)<br/><sup>3</sup>Johns Hopkins University</p>
             <p className="affiliation affiliation-note"><sup>†</sup>Work done during an internship at BAAI.</p>
-            <div className="article-links"><a className="article-link" href="https://opendrivelab.github.io/Haco-Page/">☁ Page</a><a className="article-link disabled" href="#" aria-disabled="true" data-url-placeholder="paper" onClick={(event) => event.preventDefault()}>▤ Paper</a><span className="article-link disabled" aria-disabled="true">Code · Coming soon</span></div>
+            <div className="article-links"><a className="article-link" href="https://opendrivelab.github.io/Haco-Page/">☁ Page</a><a className="article-link" href="https://arxiv.org/pdf/2609.36596" target="_blank" rel="noreferrer">▤ Paper</a><span className="article-link disabled" aria-disabled="true">Code · Coming soon</span></div>
           </header>
 
 <section id="abstract">
